@@ -18,7 +18,7 @@ class TrainLoaderHeaderTests(unittest.TestCase):
             int(INPUT_DIM),
             int(MAX_ACTIONS - 1),
         )
-        with tempfile.TemporaryDirectory(prefix="wipoker_train_loader_") as tmpdir:
+        with tempfile.TemporaryDirectory(prefix="talibus_train_loader_") as tmpdir:
             path = Path(tmpdir) / "stale_max_actions.bin"
             path.write_bytes(header)
             with self.assertRaisesRegex(ValueError, "max_actions mismatch"):

@@ -275,7 +275,6 @@ pub fn traverse_deep_cfr<G: GameModel<State = NlheState>, P: PolicyProvider>(
                     let slot = action_slots[action_idx];
                     advantages[slot] = (action_values[action_idx] - node_value) as f32;
                 }
-                // #region agent log
                 if let Some((tier_idx, pressure_idx, sort_groups)) = debug_meta {
                     if let Some((best_idx, _)) =
                         action_values.iter().enumerate().max_by(|(_, a), (_, b)| {
@@ -290,7 +289,6 @@ pub fn traverse_deep_cfr<G: GameModel<State = NlheState>, P: PolicyProvider>(
                         }
                     }
                 }
-                // #endregion
                 advantage_samples.push(AdvantageSample::new(
                     features,
                     advantages,
@@ -300,7 +298,6 @@ pub fn traverse_deep_cfr<G: GameModel<State = NlheState>, P: PolicyProvider>(
                 Ok(node_value)
             } else {
                 stats.opponent_nodes += 1;
-                // #region agent log
                 if game_state.round == game::BettingRound::Preflop {
                     let tier_idx = preflop_tier_index(game_state.players[player_idx].hole_cards);
                     let pressure_idx = pressure_bucket(game_state, player_idx);
@@ -318,7 +315,6 @@ pub fn traverse_deep_cfr<G: GameModel<State = NlheState>, P: PolicyProvider>(
                         }
                     }
                 }
-                // #endregion
                 let mut strategy_target = [0.0f32; MAX_ACTIONS];
                 for (idx, prob) in strategy.iter().enumerate().take(action_count) {
                     let slot = action_slots[idx];

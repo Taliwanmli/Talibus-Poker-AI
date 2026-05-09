@@ -418,7 +418,7 @@ mod tests {
         )
         .expect("clustering should succeed");
 
-        let path = env::temp_dir().join("wipoker_abstraction_roundtrip.clusters");
+        let path = env::temp_dir().join("talibus_abstraction_roundtrip.clusters");
         save_clustering_result(&path, &result).expect("save should succeed");
         let loaded = load_clustering_result(&path).expect("load should succeed");
         fs::remove_file(path).ok();

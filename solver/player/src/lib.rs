@@ -246,7 +246,7 @@ mod tests {
         );
         let table = BlueprintTable { policies };
 
-        let path = env::temp_dir().join("wipoker_blueprint_table.bin");
+        let path = env::temp_dir().join("talibus_blueprint_table.bin");
         table.save_to_file(&path).expect("save should work");
         let loaded = BlueprintTable::load_from_file(&path).expect("load should work");
         fs::remove_file(path).ok();

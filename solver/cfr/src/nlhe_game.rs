@@ -887,7 +887,7 @@ mod tests {
     }
 
     fn make_model_with_temp_clusters() -> (NlheGameModel, PathBuf) {
-        let dir = env::temp_dir().join(format!("wipoker_nlhe_clusters_{}", unique_temp_suffix()));
+        let dir = env::temp_dir().join(format!("talibus_nlhe_clusters_{}", unique_temp_suffix()));
         write_test_clusters(&dir);
         let model =
             NlheGameModel::heads_up_default(&dir).expect("cluster-backed model should load");
@@ -897,7 +897,7 @@ mod tests {
     #[test]
     fn model_fails_fast_when_cluster_files_are_missing() {
         let dir = env::temp_dir().join(format!(
-            "wipoker_nlhe_missing_clusters_{}",
+            "talibus_nlhe_missing_clusters_{}",
             unique_temp_suffix()
         ));
         fs::create_dir_all(&dir).expect("temp dir");

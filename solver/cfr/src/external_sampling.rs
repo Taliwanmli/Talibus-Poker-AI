@@ -107,7 +107,6 @@ impl ExternalSamplingTrainer {
         self.table.len()
     }
 
-    // #region agent log
     pub fn diagnostic_info(&self) -> (usize, usize, f64, usize) {
         let total = self.table.len();
         let mut non_uniform = 0usize;
@@ -155,7 +154,6 @@ impl ExternalSamplingTrainer {
             })
             .collect()
     }
-    // #endregion
 
     pub fn average_policy_table(&self) -> HashMap<String, Vec<f64>> {
         let mut out = HashMap::with_capacity(self.table.len());
@@ -1015,7 +1013,7 @@ mod tests {
         trainer.train_parallel(&game, 120_000, 4, 123);
         assert!(trainer.infoset_count() >= 12);
 
-        let path = env::temp_dir().join("wipoker_cfr_checkpoint.bin");
+        let path = env::temp_dir().join("talibus_cfr_checkpoint.bin");
         trainer
             .save_checkpoint(&path)
             .expect("checkpoint save should succeed");

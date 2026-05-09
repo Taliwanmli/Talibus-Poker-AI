@@ -50,7 +50,7 @@ Right now, before renting the cloud machine, do this on your own computer.
 Build the upload bundle with the explicit CUDA torch spec and local wheelhouse:
 
 ```powershell
-Set-Location "C:\my space\Computing\Casual Coding stuff\WIPOKER"
+Set-Location "C:\my space\Computing\Casual Coding stuff\TALIBUS"
 py -3 .\training\deep_cfr\build_remote_windows_bundle.py `
   --session-root ".\data\remote_session_upload" `
   --zip-output ".\data\remote_session_upload.zip" `
@@ -278,7 +278,7 @@ It includes:
 - `handoff`
 - `longrun`
 - `longrun\work\final_eval` inside the exported `longrun` tree
-- `debug\debug-1270ea.log`
+- optional debug logs when `TALIBUS_DEBUG_LOG` was set
 - curated `env` files
 - curated `machine` JSON reports
 

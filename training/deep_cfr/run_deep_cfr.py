@@ -72,27 +72,27 @@ TRAVERSE_PAR_SUMMARY_RE = re.compile(
 )
 DEFAULT_BUFFER_SAVE_EVERY = 10
 DEFAULT_SELECTION_HOLDOUT_SEEDS = 3
-DEBUG_LOG_PATH = (SCRIPT_DIR.parent.parent / "debug-1270ea.log").resolve()
+DEBUG_LOG_PATH = os.environ.get("TALIBUS_DEBUG_LOG")
 
 
-# #region agent log
-def debug_log(hypothesis_id: str, message: str, data: dict[str, Any], run_id: str = "debug-run") -> None:
+def debug_log(tag: str, message: str, data: dict[str, Any], run_id: str = "training") -> None:
+    if not DEBUG_LOG_PATH:
+        return
     payload = {
-        "sessionId": "1270ea",
-        "runId": run_id,
-        "hypothesisId": hypothesis_id,
+        "component": "deep_cfr_training",
+        "run_id": run_id,
+        "tag": tag,
         "location": "training/deep_cfr/run_deep_cfr.py",
         "message": message,
         "data": data,
         "timestamp": int(time.time() * 1000),
     }
     try:
-        with DEBUG_LOG_PATH.open("a", encoding="utf-8") as f:
+        with Path(DEBUG_LOG_PATH).open("a", encoding="utf-8") as f:
             f.write(json.dumps(payload, ensure_ascii=True) + "\n")
     except Exception:
         # Keep debug logging best-effort and never block training.
         pass
-# #endregion
 
 @dataclass
 class NetworkTrainingContext:
@@ -1740,7 +1740,6 @@ def train_network_in_process(
         )
         context.reservoir.add_many(features, targets, action_masks, iterations, rng)
     log(f"[deep-cfr] reservoir size={len(context.reservoir)} / {args.buffer_size}")
-    # #region agent log
     valid_counts = (
         np.asarray(action_masks, dtype=np.int64).sum(axis=1)
         if action_masks.size > 0
@@ -1763,7 +1762,6 @@ def train_network_in_process(
             "iteration_mean": float(np.mean(iterations)) if len(iterations) > 0 else -1.0,
         },
     )
-    # #endregion
 
     if len(context.reservoir) == 0:
         raise ValueError("reservoir is empty after loading samples")
@@ -1790,7 +1788,6 @@ def train_network_in_process(
             f"{effective_training_steps}/{recommended_training_steps} "
             f"(reservoir={len(context.reservoir):,}, batch={batch_size:,})"
         )
-    # #region agent log
     debug_log(
         "H3",
         "training_step_budget",
@@ -1803,7 +1800,6 @@ def train_network_in_process(
             "max_sample_reuse_per_iter": float(args.max_sample_reuse_per_iter),
         },
     )
-    # #endregion
     batch_indices = rng.integers(
         0,
         len(context.reservoir),
@@ -1919,7 +1915,6 @@ def train_network_in_process(
 
         if step == 1 or step == effective_training_steps:
             with torch.no_grad():
-                # #region agent log
                 if context.network_type == "strategy":
                     mask = batch_mask
                     target_probs = torch.clamp(batch_y, min=0.0) * mask
@@ -1962,8 +1957,6 @@ def train_network_in_process(
                             "effective_target_entropy_mean": float(effective_entropy.mean().item()),
                         },
                     )
-                # #endregion
-                # #region agent log
                 if context.network_type == "advantage":
                     pred_adv = context.model(batch_x, action_mask=batch_mask, strategy_mode=False)
                     all_non_pos_pred_frac = float((pred_adv.max(dim=1).values <= 0.0).float().mean().item())
@@ -1980,7 +1973,6 @@ def train_network_in_process(
                             "target_abs_mean": float(batch_y.abs().mean().item()),
                         },
                     )
-                # #endregion
 
         final_loss = float(loss.item())
         steps_ran = step
@@ -2694,8 +2686,7 @@ def run_diagnostic_suite(
             "strategy_path": str(strategy_onnx),
         }
 
-    # #region agent log
-    exploit_strategy_obj = diagnostics.get("exploitability_strategy", {})
+        exploit_strategy_obj = diagnostics.get("exploitability_strategy", {})
     exploit_adv_obj = diagnostics.get("exploitability_advantage_smoke", {})
     strat_tag_obj = diagnostics.get("h2h_strategy_vs_tag", {})
     strat_rand_obj = diagnostics.get("h2h_strategy_vs_random", {})
@@ -2727,7 +2718,6 @@ def run_diagnostic_suite(
             ),
         },
     )
-    # #endregion
 
     print_diagnostic_table(iteration, diagnostics, previous_diagnostics, baseline_diagnostics)
     return diagnostics

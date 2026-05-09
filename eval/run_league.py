@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline EV league runner for WiPoker decision engine.
+"""Offline EV league runner for Talibus decision engine.
 
 This harness is intentionally offline-only. It runs large batches of simulated
 cash-game hands and calls the TypeScript recommendation engine through a
@@ -280,6 +280,9 @@ class PolicyWorkerClient:
     def __init__(self, cmd: str, cwd: Path):
         self.cmd = cmd
         self.cwd = cwd
+        self.proc: Optional[subprocess.Popen[str]] = None
+        if not cmd.strip():
+            return
         self.proc = subprocess.Popen(
             shlex.split(cmd),
             cwd=str(cwd),
@@ -291,6 +294,10 @@ class PolicyWorkerClient:
         )
 
     def recommend(self, street: str, hand_state: Dict[str, Any]) -> Dict[str, Any]:
+        if self.proc is None:
+            raise RuntimeError(
+                "policy worker command is empty; provide --policy-cmd or use a non-worker hero mode"
+            )
         if self.proc.stdin is None or self.proc.stdout is None:
             raise RuntimeError("policy worker stdio not available")
 
@@ -315,6 +322,8 @@ class PolicyWorkerClient:
             raise RuntimeError(f"invalid JSON from policy worker: {response_line!r}") from exc
 
     def close(self) -> None:
+        if self.proc is None:
+            return
         if self.proc.poll() is None:
             self.proc.terminate()
             try:
@@ -524,7 +533,7 @@ def pooled_stats_from_runs(rows: List[Dict[str, Any]]) -> Dict[str, float]:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run offline EV league for WiPoker engine")
+    parser = argparse.ArgumentParser(description="Run offline EV league for Talibus engine")
     parser.add_argument("--hands", type=int, default=10_000, help="Number of hands to simulate")
     parser.add_argument(
         "--hands-per-seed",
@@ -571,7 +580,14 @@ def parse_args() -> argparse.Namespace:
         default="policy_worker",
         help="Evaluation backend: policy_worker (default), deep_cfr_panel, or deep_cfr_checkpoint.",
     )
-    parser.add_argument("--policy-cmd", default="node eval/policy_worker.mjs", help="Command to run policy worker")
+    parser.add_argument(
+        "--policy-cmd",
+        default=os.environ.get("TALIBUS_POLICY_CMD", ""),
+        help=(
+            "Optional external policy worker command. Deep CFR checkpoint and "
+            "panel evaluations normally do not need this."
+        ),
+    )
     parser.add_argument(
         "--deep-cfr-model-state",
         "--deep_cfr_model_state",
@@ -805,7 +821,7 @@ def ensure_repo_commands(args: argparse.Namespace) -> None:
 
 
 def patch_pokerenv_compat() -> None:
-    if getattr(Table, "_wipoker_patched", False):
+    if getattr(Table, "_talibus_patched", False):
         return
 
     original_reset = Table.reset
@@ -836,7 +852,7 @@ def patch_pokerenv_compat() -> None:
         return (
             table.n_players == 2
             and table.street == GameState.PREFLOP
-            and bool(getattr(table, "_wipoker_preflop_blind_only", False))
+            and bool(getattr(table, "_talibus_preflop_blind_only", False))
             and float(table.bet_to_match) > 0.0
         )
 
@@ -922,14 +938,14 @@ def patch_pokerenv_compat() -> None:
         self.first_to_act = None
         self.bet_to_match = 0
         self.minimum_raise = 0
-        self._wipoker_preflop_blind_only = False
+        self._talibus_preflop_blind_only = False
         for player in self.players:
             player.finish_street()
 
     def reset_fixed(self: Table, *reset_args: Any, **reset_kwargs: Any) -> Any:
-        self._wipoker_finished = False
+        self._talibus_finished = False
         obs = original_reset(self, *reset_args, **reset_kwargs)
-        self._wipoker_preflop_blind_only = (
+        self._talibus_preflop_blind_only = (
             self.n_players == 2
             and self.street == GameState.PREFLOP
             and self.last_bet_placed_by is not None
@@ -955,7 +971,7 @@ def patch_pokerenv_compat() -> None:
         obs, rewards, done, info = original_step(self, action)
 
         if pre_action_street == GameState.PREFLOP and action.action_type == PlayerAction.BET:
-            self._wipoker_preflop_blind_only = False
+            self._talibus_preflop_blind_only = False
 
         if not done and not self.hand_is_over:
             players_with_actions = [
@@ -987,18 +1003,18 @@ def patch_pokerenv_compat() -> None:
                 )
                 rewards = np.asarray([p.get_reward() for p in sorted(self.players)])
 
-        if done and not getattr(self, "_wipoker_finished", False):
+        if done and not getattr(self, "_talibus_finished", False):
             self._distribute_pot()
             self._finish_hand()
             rewards = np.asarray([p.get_reward() for p in sorted(self.players)], dtype=float)
-            self._wipoker_finished = True
+            self._talibus_finished = True
         return obs, rewards, done, info
 
     Table._street_transition = street_transition_fixed  # type: ignore[assignment]
     Table._get_valid_actions = get_valid_actions_fixed  # type: ignore[assignment]
     Table.reset = reset_fixed  # type: ignore[assignment]
     Table.step = step_fixed  # type: ignore[assignment]
-    Table._wipoker_patched = True  # type: ignore[attr-defined]
+    Table._talibus_patched = True  # type: ignore[attr-defined]
 
 
 def street_key_from_state(game_state: GameState) -> str:
@@ -1099,28 +1115,28 @@ def env_int(name: str, default: int, *, minimum: Optional[int] = None) -> int:
     return value
 
 
-POTAWARE_DEBUG_ENABLED = env_flag("WIPOKER_POTAWARE_DEBUG", False)
-RIVER_CFR_ENABLED = env_flag("WIPOKER_USE_RIVER_CFR", False)
-RIVER_CFR_OVERRIDE_ENABLED = env_flag("WIPOKER_RIVER_CFR_OVERRIDE", False)
-RIVER_CFR_ITERS = env_int("WIPOKER_RIVER_CFR_ITERS", 2000, minimum=1)
+POTAWARE_DEBUG_ENABLED = env_flag("TALIBUS_POTAWARE_DEBUG", False)
+RIVER_CFR_ENABLED = env_flag("TALIBUS_USE_RIVER_CFR", False)
+RIVER_CFR_OVERRIDE_ENABLED = env_flag("TALIBUS_RIVER_CFR_OVERRIDE", False)
+RIVER_CFR_ITERS = env_int("TALIBUS_RIVER_CFR_ITERS", 2000, minimum=1)
 RIVER_CFR_MAX_CALLS_PER_MATCH = env_int(
-    "WIPOKER_RIVER_CFR_MAX_CALLS_PER_MATCH",
+    "TALIBUS_RIVER_CFR_MAX_CALLS_PER_MATCH",
     999999,
     minimum=0,
 )
-RIVER_CFR_DEBUG_ENABLED = env_flag("WIPOKER_RIVER_CFR_DEBUG", False)
-RIVER_CFR_TEACHER_ITERS = env_int("WIPOKER_RIVER_CFR_TEACHER_ITERS", 200, minimum=1)
-RIVER_CFR_TEACHER_MAX_SAMPLES = env_int("WIPOKER_RIVER_CFR_TEACHER_MAX_SAMPLES", 200, minimum=0)
-RIVER_CFR_TEACHER_EVAL_IN_RUN = env_flag("WIPOKER_RIVER_CFR_TEACHER_EVAL_IN_RUN", False)
-TEACHER_INCLUDE_SHOWDOWN_CARDS = env_flag("WIPOKER_TEACHER_INCLUDE_SHOWDOWN_CARDS", False)
+RIVER_CFR_DEBUG_ENABLED = env_flag("TALIBUS_RIVER_CFR_DEBUG", False)
+RIVER_CFR_TEACHER_ITERS = env_int("TALIBUS_RIVER_CFR_TEACHER_ITERS", 200, minimum=1)
+RIVER_CFR_TEACHER_MAX_SAMPLES = env_int("TALIBUS_RIVER_CFR_TEACHER_MAX_SAMPLES", 200, minimum=0)
+RIVER_CFR_TEACHER_EVAL_IN_RUN = env_flag("TALIBUS_RIVER_CFR_TEACHER_EVAL_IN_RUN", False)
+TEACHER_INCLUDE_SHOWDOWN_CARDS = env_flag("TALIBUS_TEACHER_INCLUDE_SHOWDOWN_CARDS", False)
 # Phase-C flags:
-# - WIPOKER_EXACT_ACTION_FIDELITY_POSTFLOP=1 (default)
+# - TALIBUS_EXACT_ACTION_FIDELITY_POSTFLOP=1 (default)
 #   Prefer exact worker-requested postflop size when available.
-# - WIPOKER_RELAX_EXACT_POSTFLOP_RAISE_GUARDRAIL=1
+# - TALIBUS_RELAX_EXACT_POSTFLOP_RAISE_GUARDRAIL=1
 #   Skip postflop raise guardrail cap for exact-size requests (still clipped to env bounds).
-EXACT_ACTION_FIDELITY_POSTFLOP = env_flag("WIPOKER_EXACT_ACTION_FIDELITY_POSTFLOP", True)
+EXACT_ACTION_FIDELITY_POSTFLOP = env_flag("TALIBUS_EXACT_ACTION_FIDELITY_POSTFLOP", True)
 RELAX_EXACT_POSTFLOP_RAISE_GUARDRAIL = env_flag(
-    "WIPOKER_RELAX_EXACT_POSTFLOP_RAISE_GUARDRAIL",
+    "TALIBUS_RELAX_EXACT_POSTFLOP_RAISE_GUARDRAIL",
     False,
 )
 
@@ -3459,7 +3475,7 @@ def print_summary(
     fallback_count: int,
     diagnostics: Dict[str, Any],
 ) -> None:
-    print("\n=== WiPoker Offline EV Summary ===")
+    print("\n=== Talibus Offline EV Summary ===")
     print(f"hands: {int(raw['hands'])}")
     print(f"players: {args.players}")
     print(f"seed: {args.seed}")
@@ -3815,7 +3831,7 @@ def run_matrix_experiments(args: argparse.Namespace) -> int:
     matrix_raised_medium_tiny_by_opponent: Dict[str, Dict[str, Any]] = {}
     matrix_teacher_rows_by_opponent: Dict[str, List[Dict[str, Any]]] = {}
 
-    print("\n=== WiPoker Matrix Evaluation ===")
+    print("\n=== Talibus Matrix Evaluation ===")
     print(
         f"format={'hu' if players == 2 else '6max'} players={players} "
         f"seeds={seeds} opponents={opponent_profiles} hands_per_seed={hands_per_seed}"
@@ -4288,8 +4304,8 @@ def run_hand(
     river_cfr_config: Dict[str, Any],
     river_cfr_state: Dict[str, Any],
 ) -> Tuple[float, float, Dict[str, Any], List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
-    debug_trace_nonpremium = env_flag("WIPOKER_DEBUG_TRACE_NONPREMIUM_FACING3BET_RAISE", False)
-    debug_trace_any = env_flag("WIPOKER_DEBUG_TRACE_ANY_FACING3BET_RAISE", False)
+    debug_trace_nonpremium = env_flag("TALIBUS_DEBUG_TRACE_NONPREMIUM_FACING3BET_RAISE", False)
+    debug_trace_any = env_flag("TALIBUS_DEBUG_TRACE_ANY_FACING3BET_RAISE", False)
     context = HandContext()
     obs = table.reset()
     done = False
@@ -5324,12 +5340,12 @@ def main() -> int:
     args = parse_args()
     args.seed = normalize_seed_u32(int(args.seed))
     preflop_selection_mode_effective = str(
-        os.environ.get("WIPOKER_PREFLOP_SELECTION_MODE")
+        os.environ.get("TALIBUS_PREFLOP_SELECTION_MODE")
         or os.environ.get("PREFLOP_SELECTION_MODE")
         or "unknown"
     ).strip().lower()
     postflop_selection_mode_effective = str(
-        os.environ.get("WIPOKER_POLICY_SELECTION_MODE")
+        os.environ.get("TALIBUS_POLICY_SELECTION_MODE")
         or os.environ.get("POLICY_SELECTION_MODE")
         or "unknown"
     ).strip().lower()
@@ -5506,9 +5522,9 @@ def main() -> int:
     limp_iso_outcome_counts: Dict[str, int] = {"villain_checked": 0, "villain_raised": 0, "other": 0}
     limp_iso_response_counts: Dict[str, int] = {"fold": 0, "call": 0, "raise": 0}
     debug_trace_trigger_mode = "off"
-    if env_flag("WIPOKER_DEBUG_TRACE_NONPREMIUM_FACING3BET_RAISE", False):
+    if env_flag("TALIBUS_DEBUG_TRACE_NONPREMIUM_FACING3BET_RAISE", False):
         debug_trace_trigger_mode = "nonpremium_facing_3bet_raise"
-    if env_flag("WIPOKER_DEBUG_TRACE_ANY_FACING3BET_RAISE", False):
+    if env_flag("TALIBUS_DEBUG_TRACE_ANY_FACING3BET_RAISE", False):
         debug_trace_trigger_mode = (
             "nonpremium_or_any_facing_3bet_raise"
             if debug_trace_trigger_mode != "off"

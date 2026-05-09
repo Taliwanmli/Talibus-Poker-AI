@@ -511,23 +511,24 @@ fn maybe_print_parallel_progress(
     }
 }
 
-// #region agent log
 fn append_debug_log(message: &str, data: &str) {
+    let Some(path) = std::env::var_os("TALIBUS_DEBUG_LOG") else {
+        return;
+    };
     let timestamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_millis())
         .unwrap_or(0);
     let line = format!(
-        "{{\"sessionId\":\"1270ea\",\"runId\":\"debug-run\",\"hypothesisId\":\"H6\",\"location\":\"solver/deep_cfr/src/bin/run_traversals.rs\",\"message\":\"{}\",\"data\":{},\"timestamp\":{}}}\n",
+        "{{\"component\":\"run_traversals\",\"message\":\"{}\",\"data\":{},\"timestamp\":{}}}\n",
         message, data, timestamp
     );
     let _ = std::fs::OpenOptions::new()
         .create(true)
         .append(true)
-        .open("debug-1270ea.log")
+        .open(path)
         .and_then(|mut file| file.write_all(line.as_bytes()));
 }
-// #endregion
 
 fn print_help() {
     println!(

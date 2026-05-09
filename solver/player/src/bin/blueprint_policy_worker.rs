@@ -541,13 +541,13 @@ fn action_payload_from_index(request: &Value, action_idx: usize) -> Value {
 fn print_help() {
     println!(
         "blueprint_policy_worker options:\n\
-         --cluster-dir <path> (default from WIPOKER_CLUSTER_DIR or checkpoints/nlhe_clusters)\n\
+         --cluster-dir <path> (default from TALIBUS_CLUSTER_DIR or checkpoints/nlhe_clusters)\n\
          environment:\n\
-         WIPOKER_BLUEPRINT_FILE (default checkpoints/latest.blueprint)\n\
-         WIPOKER_BLUEPRINT_MODE sample|argmax (default sample)\n\
-         WIPOKER_BLUEPRINT_SEED (default 17)\n\
-         WIPOKER_BLUEPRINT_PLAYER_INDEX (default 0)\n\
-         WIPOKER_BLUEPRINT_STRICT true|false (default false)"
+         TALIBUS_BLUEPRINT_FILE (default checkpoints/latest.blueprint)\n\
+         TALIBUS_BLUEPRINT_MODE sample|argmax (default sample)\n\
+         TALIBUS_BLUEPRINT_SEED (default 17)\n\
+         TALIBUS_BLUEPRINT_PLAYER_INDEX (default 0)\n\
+         TALIBUS_BLUEPRINT_STRICT true|false (default false)"
     );
 }
 
@@ -558,18 +558,18 @@ fn main() {
         return;
     }
 
-    let blueprint_file = env_or_default("WIPOKER_BLUEPRINT_FILE", "checkpoints/latest.blueprint");
-    let mode = parse_mode(&env_or_default("WIPOKER_BLUEPRINT_MODE", "sample"));
-    let seed_base = env_or_default("WIPOKER_BLUEPRINT_SEED", "17")
+    let blueprint_file = env_or_default("TALIBUS_BLUEPRINT_FILE", "checkpoints/latest.blueprint");
+    let mode = parse_mode(&env_or_default("TALIBUS_BLUEPRINT_MODE", "sample"));
+    let seed_base = env_or_default("TALIBUS_BLUEPRINT_SEED", "17")
         .parse::<u64>()
         .unwrap_or(17);
-    let player_index = env_or_default("WIPOKER_BLUEPRINT_PLAYER_INDEX", "0")
+    let player_index = env_or_default("TALIBUS_BLUEPRINT_PLAYER_INDEX", "0")
         .parse::<usize>()
         .unwrap_or(0);
-    let strict_blueprint_loading = env_flag("WIPOKER_BLUEPRINT_STRICT", false);
+    let strict_blueprint_loading = env_flag("TALIBUS_BLUEPRINT_STRICT", false);
     let cluster_dir_raw = cli_flag_value(&args, "--cluster-dir")
         .map(|v| v.to_string())
-        .unwrap_or_else(|| env_or_default("WIPOKER_CLUSTER_DIR", "checkpoints/nlhe_clusters"));
+        .unwrap_or_else(|| env_or_default("TALIBUS_CLUSTER_DIR", "checkpoints/nlhe_clusters"));
     let cluster_dir = PathBuf::from(cluster_dir_raw);
 
     let blueprint_path = PathBuf::from(&blueprint_file);

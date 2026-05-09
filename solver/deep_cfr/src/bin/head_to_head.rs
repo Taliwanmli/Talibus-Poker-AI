@@ -21,9 +21,6 @@ const DEFAULT_PROGRESS_EVERY: usize = 1_000;
 const DEFAULT_STARTING_STACK: u32 = 2_000;
 const DEFAULT_SMALL_BLIND: u32 = 10;
 const DEFAULT_BIG_BLIND: u32 = 20;
-const DEBUG_LOG_FILE: &str = "debug-1270ea.log";
-const DEBUG_SESSION_ID: &str = "1270ea";
-const DEBUG_RUN_ID: &str = "tag_eval_debug";
 const DEBUG_ACTION_GROUPS: usize = 6;
 const DEBUG_ROUNDS: usize = 4;
 const DEBUG_PRESSURE_BUCKETS: usize = 4;
@@ -185,12 +182,8 @@ fn hand_traces_json(records: &[HandTrace]) -> String {
     format!("[{}]", items)
 }
 
-fn debug_log_path() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .and_then(Path::parent)
-        .unwrap_or_else(|| Path::new("."))
-        .join(DEBUG_LOG_FILE)
+fn debug_log_path() -> Option<PathBuf> {
+    std::env::var_os("TALIBUS_DEBUG_LOG").map(PathBuf::from)
 }
 
 fn json_escape(raw: &str) -> String {
@@ -201,15 +194,16 @@ fn json_escape(raw: &str) -> String {
 }
 
 fn append_debug_log(hypothesis_id: &str, location: &str, message: &str, data_json: &str) {
+    let Some(path) = debug_log_path() else {
+        return;
+    };
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|value| value.as_millis())
         .unwrap_or(0);
     let line = format!(
-        "{{\"sessionId\":\"{session}\",\"runId\":\"{run_id}\",\"hypothesisId\":\"{hypothesis}\",\"location\":\"{location}\",\"message\":\"{message}\",\"data\":{data},\"timestamp\":{timestamp}}}",
-        session = DEBUG_SESSION_ID,
-        run_id = DEBUG_RUN_ID,
-        hypothesis = json_escape(hypothesis_id),
+        "{{\"component\":\"head_to_head\",\"tag\":\"{tag}\",\"location\":\"{location}\",\"message\":\"{message}\",\"data\":{data},\"timestamp\":{timestamp}}}",
+        tag = json_escape(hypothesis_id),
         location = json_escape(location),
         message = json_escape(message),
         data = data_json,
@@ -218,7 +212,7 @@ fn append_debug_log(hypothesis_id: &str, location: &str, message: &str, data_jso
     let _ = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(debug_log_path())
+        .open(path)
         .and_then(|mut handle| writeln!(handle, "{line}"));
 }
 
@@ -1013,7 +1007,6 @@ fn simulate_hand(
                     .get(action_idx)
                     .map(|action| action.sort_group)
                     .unwrap_or(0);
-                // #region agent log
                 record_action(
                     debug_stats,
                     side_idx,
@@ -1021,7 +1014,6 @@ fn simulate_hand(
                     pressure_idx,
                     sort_group,
                 );
-                // #endregion
                 let action_group = usize::from(sort_group).min(DEBUG_ACTION_GROUPS - 1);
                 if side_idx == 0 {
                     trace.model_a_actions[action_group] += 1;
@@ -1225,7 +1217,6 @@ fn run_main() -> AppResult<()> {
     );
     println!("[h2h]   hands={} elapsed={elapsed:.1}s", report.hands);
 
-    // #region agent log
     append_debug_log(
         "H2",
         "head_to_head.rs:run_main:result_buckets",
@@ -1242,9 +1233,7 @@ fn run_main() -> AppResult<()> {
             debug_stats.model_a_loss_bucket_counts
         ),
     );
-    // #endregion
 
-    // #region agent log
     append_debug_log(
         "H4",
         "head_to_head.rs:run_main:action_profile",
@@ -1255,9 +1244,7 @@ fn run_main() -> AppResult<()> {
             debug_stats.action_counts
         ),
     );
-    // #endregion
 
-    // #region agent log
     append_debug_log(
         "H7",
         "head_to_head.rs:run_main:preflop_tier_summary",
@@ -1271,9 +1258,7 @@ fn run_main() -> AppResult<()> {
             debug_stats.model_a_big_win_preflop_by_tier
         ),
     );
-    // #endregion
 
-    // #region agent log
     append_debug_log(
         "H5",
         "head_to_head.rs:run_main:top_losses",
@@ -1284,9 +1269,7 @@ fn run_main() -> AppResult<()> {
             hand_traces_json(&debug_stats.top_losses)
         ),
     );
-    // #endregion
 
-    // #region agent log
     append_debug_log(
         "H6",
         "head_to_head.rs:run_main:top_wins",
@@ -1297,7 +1280,6 @@ fn run_main() -> AppResult<()> {
             hand_traces_json(&debug_stats.top_wins)
         ),
     );
-    // #endregion
 
     Ok(())
 }

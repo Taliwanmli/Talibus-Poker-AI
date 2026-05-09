@@ -62,8 +62,8 @@ def parse_args() -> argparse.Namespace:
         "--policy-cmd",
         "--policy_cmd",
         dest="policy_cmd",
-        default=os.environ.get("WIPOKER_POLICY_CMD", "node eval/policy_worker.mjs"),
-        help="Policy worker command forwarded to each run_league worker.",
+        default=os.environ.get("TALIBUS_POLICY_CMD", ""),
+        help="Optional policy worker command forwarded to each run_league worker.",
     )
     return parser.parse_args()
 
@@ -81,7 +81,7 @@ def parse_positive_int(value: str | None, default: int) -> int:
 
 
 def default_workers() -> int:
-    env_workers = os.environ.get("WIPOKER_PARALLEL_WORKERS")
+    env_workers = os.environ.get("TALIBUS_PARALLEL_WORKERS")
     if env_workers is not None:
         return parse_positive_int(env_workers, 1)
     cpu = os.cpu_count() or 1
@@ -976,7 +976,7 @@ def main() -> int:
         payloads.append(payload)
 
     top_n = parse_positive_int(
-        os.environ.get("WIPOKER_STORE_MISSING_TOP_N"), REPORT_TOP_MISSING_DEFAULT
+        os.environ.get("TALIBUS_STORE_MISSING_TOP_N"), REPORT_TOP_MISSING_DEFAULT
     )
     merged = merge_report_payloads(payloads, top_missing_n=top_n)
     args.report_json.write_text(json.dumps(merged, indent=2), encoding="utf-8")

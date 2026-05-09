@@ -2,20 +2,35 @@ import re
 import unittest
 from pathlib import Path
 
-from eval.deep_cfr_checkpoint_worker import (
-    BET_SLOT_COUNT,
-    BET_SLOT_START,
-    MAX_ACTIONS,
-    RAISE_SLOT_COUNT,
-    RAISE_SLOT_START,
-    SLOT_ALL_IN,
-    SLOT_CALL,
-    SLOT_CHECK,
-    SLOT_FOLD,
-    build_slot_action_map,
+try:
+    from eval.deep_cfr_checkpoint_worker import (
+        BET_SLOT_COUNT,
+        BET_SLOT_START,
+        MAX_ACTIONS,
+        RAISE_SLOT_COUNT,
+        RAISE_SLOT_START,
+        SLOT_ALL_IN,
+        SLOT_CALL,
+        SLOT_CHECK,
+        SLOT_FOLD,
+        build_slot_action_map,
+    )
+except ModuleNotFoundError as exc:
+    if exc.name != "torch":
+        raise
+    BET_SLOT_COUNT = BET_SLOT_START = MAX_ACTIONS = None
+    RAISE_SLOT_COUNT = RAISE_SLOT_START = None
+    SLOT_ALL_IN = SLOT_CALL = SLOT_CHECK = SLOT_FOLD = None
+    build_slot_action_map = None
+
+
+torch_required = unittest.skipIf(
+    build_slot_action_map is None,
+    "torch is not installed; skipping checkpoint worker slot tests",
 )
 
 
+@torch_required
 class DeepCfrCheckpointSlotParityTests(unittest.TestCase):
     def test_solver_and_worker_slot_constants_match(self):
         repo_root = Path(__file__).resolve().parents[1]
