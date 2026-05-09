@@ -1,0 +1,6 @@
+torch>=2.0
+numpy>=1.24
+onnx>=1.14
+onnxscript>=0.6
+onnxruntime>=1.23
+colorama>=0.4
