@@ -1,146 +1,138 @@
 # Talibus
 
-Talibus is an AI-assisted research prototype for six-player no-limit Texas
-Hold'em. It combines a Rust poker simulation/runtime stack with a
-Deep-CFR-style neural training pipeline, ONNX model deployment, scripted
-opponent evaluation, and depth-limited real-time search.
+Talibus is a research prototype for six-player no-limit Texas Hold'em. It
+combines a Rust poker simulation/runtime stack with a Deep-CFR-style neural
+training pipeline, PyTorch model training, ONNX deployment, scripted opponent
+evaluation, and depth-limited real-time search.
 
-This repository is a cleaned research release extracted from a broader
-exploratory development repo. The original repo included abandoned approaches,
-generated training artifacts, frontend experiments, and live-client tooling.
-This release keeps the core research system.
+The project is intended for research, experimentation, and systems engineering
+work around imperfect-information games. It is not a production poker bot and
+does not claim solved, superhuman, or converged multiplayer poker play.
 
-## What This Contains
+## Features
 
-- Rust NLHE game simulation and solver crates under `solver/`.
-- Deep-CFR-style traversal, sample encoding, ONNX policy inference, and
-  real-time search in `solver/deep_cfr`.
-- Python/PyTorch model training, reservoir-style sample management, and
-  long-run orchestration in `training/deep_cfr`.
-- Scripted opponent and evaluation tooling, including TAG/LAG/nit/calling
-  station baselines.
-- 6-max evaluation harnesses for seat rotation, opponent comparison,
-  checkpoint progression, mixed-table testing, and search-budget sweeps.
-- Prebuilt abstraction cluster assets under `checkpoints/nlhe_clusters`.
-
-## Core Capabilities
-
-- Train neural advantage/strategy approximators from Deep-CFR-style traversal
-  samples.
-- Export trained PyTorch models to ONNX for Rust-side inference.
-- Evaluate model-only policies against scripted 6-max baselines.
-- Evaluate depth-limited real-time search over a trained neural policy.
-- Run structured experiments for seat rotation, opponent style, checkpoint
-  progression, mixed tables, and search-budget sensitivity.
-
-## What This Does Not Claim
-
-Talibus is not presented as a solved poker agent, a superhuman poker system, or
-a proof that Deep CFR converges in multiplayer poker. It is a research and
-systems-engineering prototype for experimenting with neural CFR-style training
-and runtime search in an abstracted 6-max NLHE environment.
-
-Historical long-run model checkpoints and result artifacts are not included in
-this cleaned repo. Reproducible compact evaluations should be added under
-`results/` as they are recovered or rerun.
-
-## Architecture
-
-The system has four main layers:
-
-1. `solver/game`: Rust NLHE game mechanics, betting, pots, showdown, and legal
-   action handling.
-2. `solver/cfr`: game-model wrappers, information-set construction, card/board
-   abstraction, and fixed action-slot mapping.
-3. `solver/deep_cfr`: traversal, feature encoding, ONNX policy inference,
-   scripted baselines, ring evaluation, and real-time search.
-4. `training/deep_cfr`: PyTorch networks, sample buffers, training loops,
-   evaluation orchestration, and model export.
-
-See `docs/architecture.md` for more detail.
+- Rust NLHE game mechanics, betting, pots, showdown, and legal-action handling.
+- Imperfect-information wrappers and fixed action-slot abstraction.
+- Deep-CFR-style traversal and sample generation.
+- PyTorch advantage/strategy model training.
+- Reservoir and disk-backed training buffers.
+- ONNX export and Rust-side ONNX inference.
+- Scripted TAG, LAG, nit, and calling-station baseline policies.
+- Model-only ring-game evaluation.
+- Depth-limited real-time search over a neural policy.
+- Evaluation harnesses for seat rotation, checkpoint progression, opponent
+  comparison, mixed tables, and search-budget sweeps.
+- Compact public result packs under `results/`.
 
 ## Repository Layout
 
 ```text
-checkpoints/nlhe_clusters/     Precomputed NLHE abstraction cluster assets
-docs/                          Public-facing project documentation
-eval/                          Restored evaluation package used by training scripts
-results/                       Placeholder for compact reproducible result packs
-solver/                        Rust workspace for game, CFR, and Deep CFR runtime
-training/deep_cfr/             Python/PyTorch training and long-run orchestration
-run_eval_suite.py              Comprehensive local 6-max evaluation runner
-deep_cfr_watchdog.ps1          Windows long-run helper used during development
+checkpoints/nlhe_clusters/     Precomputed abstraction cluster assets
+docs/                          Architecture, setup, evaluation, and limitations
+eval/                          Python evaluation helpers and regression tests
+results/                       Compact public result packs
+solver/                        Rust workspace for game, CFR, and runtime code
+training/deep_cfr/             PyTorch training and long-run orchestration
+run_eval_suite.py              Structured 6-max evaluation runner
+deep_cfr_watchdog.ps1          Windows helper for long training runs
 ```
 
-## Setup
+Large generated buffers, raw logs, PyTorch checkpoints, and ONNX model binaries
+are not committed. The included result pack records model metadata and SHA-256
+hashes for the local artifacts used to produce the published evaluation.
 
-Install:
+## Quick Start
 
-- Rust stable with Cargo.
-- Python 3.10+.
-- Python packages from `training/deep_cfr/requirements.txt` and
-  `eval/requirements.txt`.
-- ONNX Runtime support compatible with the Rust `ort` crate. On some systems
-  this requires setting the ONNX Runtime library path before running Rust
-  binaries that load ONNX models.
+Install Rust stable, Python 3.10 or newer, and a native build toolchain. Then:
 
-Basic verification:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r training/deep_cfr/requirements.txt
+pip install -r eval/requirements.txt
+```
+
+On Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r training\deep_cfr\requirements.txt
+python -m pip install -r eval\requirements.txt
+```
+
+Build and test the Rust workspace:
 
 ```bash
 cd solver
 cargo check --workspace
 cargo test -p cfr
 cargo test -p abstraction
+cargo build --release -p deep_cfr --bin ring_game_eval --bin realtime_play
 ```
 
+Run Python checks from the repository root:
+
 ```bash
-cd ..
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r training/deep_cfr/requirements.txt
-pip install -r eval/requirements.txt
-python -m py_compile training/deep_cfr/model.py training/deep_cfr/train.py training/deep_cfr/run_deep_cfr.py
+python -m compileall -q .
+python -m unittest discover eval
 python run_eval_suite.py --help
 ```
 
-The full training and evaluation runs require generated artifacts under `data/`
-and trained ONNX checkpoints. Those are intentionally not committed here.
+See `docs/setup.md` for platform notes, ONNX Runtime details, and the longer
+verification checklist.
 
-## Build Runtime Binaries
+## Training
+
+The main training entry point is:
 
 ```bash
-cd solver
-cargo build --release -p deep_cfr --bin run_traversals
-cargo build --release -p deep_cfr --bin ring_game_eval
-cargo build --release -p deep_cfr --bin realtime_play
+python training/deep_cfr/run_deep_cfr.py --help
 ```
 
-These binaries are used by the Python orchestration and evaluation scripts.
+A full 6-max run requires the Rust traversal binary, abstraction clusters, and
+substantial generated data under `data/`. Start with small smoke settings before
+launching long runs. Long-run artifacts can be many gigabytes and are excluded
+by `.gitignore`.
 
 ## Evaluation
 
-The main display evaluation entry point is:
+The main structured evaluation entry point is:
 
 ```bash
 python run_eval_suite.py --help
 ```
 
-It expects compiled Rust binaries and a trained model checkpoint. See
-`docs/evaluation.md` for the intended result structure and how to add recovered
-or rerun evaluation outputs.
+The suite expects compiled Rust binaries and a trained ONNX strategy model.
+Evaluation outputs are controlled simulator measurements against scripted
+baselines. They are useful for regression testing and research comparison, but
+they are not evidence of real-money performance or human-level strength.
+
+Included public result pack:
+
+- `results/2026-04-03-laptop-longrun-opt/`
+
+That pack contains a sanitized summary of a 6-max mixed-table simulator
+evaluation using the local `strategy_shared_best_ring.onnx` artifact. The six
+seat-rotation runs used 1,000 hands per seat, a 2,000 ms search budget, 200 deck
+samples, and scripted mixed opponents: TAG, calling station, LAG, nit, TAG.
+The reported seat bb/100 values range from 3664.615 to 6222.160, averaging
+5008.903 bb/100 across seats. These large values are specific to the scripted
+simulator setup and should be interpreted only in that context.
+
+See `docs/evaluation.md` for result-file meanings and interpretation guidance.
 
 ## Documentation
 
-- `docs/architecture.md`: system design and component map.
-- `docs/evaluation.md`: result-pack structure and evaluation interpretation.
-- `docs/setup.md`: setup, verification, and common commands.
-- `docs/recovering-results.md`: what to copy from the original development
-  machine when historical runs are recovered.
-- `docs/publishing.md`: checklist for pushing this cleaned release to GitHub.
-- `docs/limitations.md`: scope and claims that should not be made.
+- `docs/architecture.md`: component map and runtime/training flow.
+- `docs/setup.md`: installation, checks, and common commands.
+- `docs/evaluation.md`: evaluation harnesses and published result pack.
+- `docs/limitations.md`: scope, caveats, and claims this project does not make.
+- `training/deep_cfr/REMOTE_WINDOWS_RUNBOOK.md`: generalized remote Windows
+  training workflow for larger experiments.
 
-## Status
+## License
 
-This repo is currently suitable as a cleaned implementation and documentation
-base. The next required step is to recover or rerun compact 6-max evaluations
-and add result summaries under `results/`.
+This project is released under the MIT License. See `LICENSE`.

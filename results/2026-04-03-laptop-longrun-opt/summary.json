@@ -1,0 +1,86 @@
+{
+    "result_pack":  "2026-04-03-laptop-longrun-opt",
+    "source_run":  "deep_cfr_6max_laptop_longrun_opt",
+    "generated_at":  "2026-04-03T19:12:23.367199+00:00",
+    "evaluation_type":  "controlled simulator evaluation against scripted baselines",
+    "suite_config":  {
+                         "num_players":  6,
+                         "blinds":  {
+                                        "big_blind":  20,
+                                        "small_blind":  10
+                                    },
+                         "starting_stack":  2000,
+                         "deck_samples":  200,
+                         "mixed_table_opponents":  [
+                                                       "tag",
+                                                       "calling-station",
+                                                       "lag",
+                                                       "nit",
+                                                       "tag"
+                                                   ],
+                         "model_seat":  0,
+                         "model_artifact":  "strategy_shared_best_ring.onnx (not committed; see model_artifacts.json)",
+                         "cluster_assets":  "checkpoints/nlhe_clusters"
+                     },
+    "mixed_budget_floor":  [
+                               {
+                                   "average_decision_ms":  1152.7236842105262,
+                                   "average_iterations_per_decision":  35459.14376218324,
+                                   "bb_per_100":  4747.524999999995,
+                                   "budget_ms":  500,
+                                   "seat":  0
+                               }
+                           ],
+    "mixed_table_seat_rotation":  [
+                                      {
+                                          "average_decision_ms":  2694.190936863544,
+                                          "average_iterations_per_decision":  136825.82230142565,
+                                          "bb_per_100":  4539.884999999997,
+                                          "budget_ms":  2000,
+                                          "seat":  0
+                                      },
+                                      {
+                                          "average_decision_ms":  2581.715488215488,
+                                          "average_iterations_per_decision":  193268.25378787878,
+                                          "bb_per_100":  5498.014999999999,
+                                          "budget_ms":  2000,
+                                          "seat":  1
+                                      },
+                                      {
+                                          "average_decision_ms":  3324.1013550135503,
+                                          "average_iterations_per_decision":  128664.08292682927,
+                                          "bb_per_100":  3664.615,
+                                          "budget_ms":  2000,
+                                          "seat":  2
+                                      },
+                                      {
+                                          "average_decision_ms":  2810.12285012285,
+                                          "average_iterations_per_decision":  121001.38144963144,
+                                          "bb_per_100":  5205.470000000002,
+                                          "budget_ms":  2000,
+                                          "seat":  3
+                                      },
+                                      {
+                                          "average_decision_ms":  2757.1566765578636,
+                                          "average_iterations_per_decision":  151768.60415430268,
+                                          "bb_per_100":  4923.274999999999,
+                                          "budget_ms":  2000,
+                                          "seat":  4
+                                      },
+                                      {
+                                          "average_decision_ms":  2689.477157360406,
+                                          "average_iterations_per_decision":  158766.52002256064,
+                                          "bb_per_100":  6222.16,
+                                          "budget_ms":  2000,
+                                          "seat":  5
+                                      }
+                                  ],
+    "omitted_sections":  {
+                             "checkpoint_progression":  "not run in this final suite",
+                             "opponent_variety":  "not run in this final suite",
+                             "search_budget_sweep":  "not run in this final suite",
+                             "search_opponent_variety":  "not run in this final suite",
+                             "seat_rotation":  "not run in this final suite",
+                             "raw_logs":  "not included in the public result pack"
+                         }
+}

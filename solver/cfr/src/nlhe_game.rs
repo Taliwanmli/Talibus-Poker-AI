@@ -922,11 +922,12 @@ mod tests {
         let mut trainer = ExternalSamplingTrainer::new(2);
         trainer.train_parallel(&model, 20, 2, 99);
         assert!(trainer.infoset_count() > 0);
-
-        let ev0 = trainer.expected_value_against_average_policy(&model, 0);
-        let ev1 = trainer.expected_value_against_average_policy(&model, 1);
-        assert!(ev0.is_finite());
-        assert!(ev1.is_finite());
+        let (total_infosets, non_uniform_infosets, avg_actions, max_actions) =
+            trainer.diagnostic_info();
+        assert!(total_infosets > 0);
+        assert!(non_uniform_infosets > 0);
+        assert!(avg_actions.is_finite());
+        assert!(max_actions > 0);
         fs::remove_dir_all(dir).ok();
     }
 

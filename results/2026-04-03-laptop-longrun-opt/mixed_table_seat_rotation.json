@@ -1,0 +1,264 @@
+{
+    "config":  {
+                   "adaptive_budget":  false,
+                   "batch_queue_capacity":  8192,
+                   "batch_size":  128,
+                   "batch_wait_us":  50,
+                   "budget_ms":  2000,
+                   "deck_samples":  200,
+                   "hands":  1000,
+                   "num_players":  6,
+                   "opponents":  [
+                                     "tag",
+                                     "calling-station",
+                                     "lag",
+                                     "nit",
+                                     "tag"
+                                 ],
+                   "seed":  999,
+                   "threads":  24
+               },
+    "generated_at":  "2026-04-03T18:32:54.562805+00:00",
+    "runs":  [
+                 {
+                     "seat":  0,
+                     "model_seat":  0,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  2000,
+                     "average_budget_ms":  2000.0,
+                     "average_decision_ms":  2694.190936863544,
+                     "average_infosets_per_decision":  11892.789714867617,
+                     "average_iterations_per_decision":  136825.82230142565,
+                     "hands_per_second":  0.18884534627750985,
+                     "model_bb_per_100":  4539.884999999997,
+                     "model_bb_per_hand":  45.39884999999997,
+                     "model_wins":  240,
+                     "model_losses":  760,
+                     "ties":  0,
+                     "per_seat_bb_per_100":  [
+                                                 4539.884999999997,
+                                                 199.03499999999994,
+                                                 -3770.74,
+                                                 -1473.144999999999,
+                                                 391.245,
+                                                 113.72000000000003
+                                             ],
+                     "zero_sum_check_bb_per_hand":  -2.3192114895209669E-14
+                 },
+                 {
+                     "seat":  1,
+                     "model_seat":  1,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  2000,
+                     "average_budget_ms":  2000.0,
+                     "average_decision_ms":  2581.715488215488,
+                     "average_infosets_per_decision":  5371.304292929293,
+                     "average_iterations_per_decision":  193268.25378787878,
+                     "hands_per_second":  0.1629447550735455,
+                     "model_bb_per_100":  5498.014999999999,
+                     "model_bb_per_hand":  54.980149999999995,
+                     "model_wins":  301,
+                     "model_losses":  699,
+                     "ties":  0,
+                     "per_seat_bb_per_100":  [
+                                                 69.31000000000003,
+                                                 5498.014999999999,
+                                                 -3908.515000000001,
+                                                 -2113.1199999999994,
+                                                 293.11,
+                                                 161.2
+                                             ],
+                     "zero_sum_check_bb_per_hand":  -9.3223206931725148E-15
+                 },
+                 {
+                     "seat":  2,
+                     "model_seat":  2,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  2000,
+                     "average_budget_ms":  2000.0,
+                     "average_decision_ms":  3324.1013550135503,
+                     "average_infosets_per_decision":  32939.632520325205,
+                     "average_iterations_per_decision":  128664.08292682927,
+                     "hands_per_second":  0.162837545043576,
+                     "model_bb_per_100":  3664.615,
+                     "model_bb_per_hand":  36.64615,
+                     "model_wins":  194,
+                     "model_losses":  95,
+                     "ties":  711,
+                     "per_seat_bb_per_100":  [
+                                                 -152.06000000000003,
+                                                 -2299.569999999997,
+                                                 3664.615,
+                                                 -1620.8450000000016,
+                                                 274.26500000000004,
+                                                 133.59499999999997
+                                             ],
+                     "zero_sum_check_bb_per_hand":  1.0913936421275139E-14
+                 },
+                 {
+                     "seat":  3,
+                     "model_seat":  3,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  2000,
+                     "average_budget_ms":  2000.0,
+                     "average_decision_ms":  2810.12285012285,
+                     "average_infosets_per_decision":  30614.550368550368,
+                     "average_iterations_per_decision":  121001.38144963144,
+                     "hands_per_second":  0.2182648696266989,
+                     "model_bb_per_100":  5205.470000000002,
+                     "model_bb_per_hand":  52.05470000000002,
+                     "model_wins":  259,
+                     "model_losses":  67,
+                     "ties":  674,
+                     "per_seat_bb_per_100":  [
+                                                 -357.0549999999999,
+                                                 -1914.4250000000004,
+                                                 -3375.1150000000002,
+                                                 5205.470000000002,
+                                                 243.89000000000013,
+                                                 197.23499999999984
+                                             ],
+                     "zero_sum_check_bb_per_hand":  1.4097167877480388E-14
+                 },
+                 {
+                     "seat":  4,
+                     "model_seat":  4,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  2000,
+                     "average_budget_ms":  2000.0,
+                     "average_decision_ms":  2757.1566765578636,
+                     "average_infosets_per_decision":  21347.753115727002,
+                     "average_iterations_per_decision":  151768.60415430268,
+                     "hands_per_second":  0.21500242643761885,
+                     "model_bb_per_100":  4923.274999999999,
+                     "model_bb_per_hand":  49.23274999999999,
+                     "model_wins":  259,
+                     "model_losses":  62,
+                     "ties":  679,
+                     "per_seat_bb_per_100":  [
+                                                 -146.51,
+                                                 -1959.7650000000008,
+                                                 -3278.565000000001,
+                                                 126.66,
+                                                 4923.274999999999,
+                                                 334.905
+                                             ],
+                     "zero_sum_check_bb_per_hand":  -3.228706191293895E-14
+                 },
+                 {
+                     "seat":  5,
+                     "model_seat":  5,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  2000,
+                     "average_budget_ms":  2000.0,
+                     "average_decision_ms":  2689.477157360406,
+                     "average_infosets_per_decision":  13287.453468697124,
+                     "average_iterations_per_decision":  158766.52002256064,
+                     "hands_per_second":  0.20954352014442928,
+                     "model_bb_per_100":  6222.16,
+                     "model_bb_per_hand":  62.221599999999995,
+                     "model_wins":  320,
+                     "model_losses":  33,
+                     "ties":  647,
+                     "per_seat_bb_per_100":  [
+                                                 -283.2500000000001,
+                                                 -2218.705,
+                                                 -3863.865000000001,
+                                                 130.8,
+                                                 12.860000000000019,
+                                                 6222.16
+                                             ],
+                     "zero_sum_check_bb_per_hand":  -1.4551915228366852E-14
+                 }
+             ]
+}

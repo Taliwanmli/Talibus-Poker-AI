@@ -1,0 +1,14 @@
+{
+    "version":  2,
+    "mode":  "shared_multiseat",
+    "completed_iterations":  211,
+    "updated_at":  "2026-03-29T23:42:45.385644+00:00",
+    "num_players":  6,
+    "artifacts":  {
+                      "strategy_onnx":  "strategy_shared.onnx (not committed; see model_artifacts.json)",
+                      "advantage_onnx":  "advantage_shared.onnx (not committed; see model_artifacts.json)",
+                      "strategy_state":  "strategy_shared.pt (not committed)",
+                      "advantage_state":  "advantage_shared.pt (not committed)",
+                      "work_dir":  "data/deep_cfr_6max_laptop_longrun_opt (local training run)"
+                  }
+}

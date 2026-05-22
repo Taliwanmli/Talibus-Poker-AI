@@ -2686,7 +2686,7 @@ def run_diagnostic_suite(
             "strategy_path": str(strategy_onnx),
         }
 
-        exploit_strategy_obj = diagnostics.get("exploitability_strategy", {})
+    exploit_strategy_obj = diagnostics.get("exploitability_strategy", {})
     exploit_adv_obj = diagnostics.get("exploitability_advantage_smoke", {})
     strat_tag_obj = diagnostics.get("h2h_strategy_vs_tag", {})
     strat_rand_obj = diagnostics.get("h2h_strategy_vs_random", {})

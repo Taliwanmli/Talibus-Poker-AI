@@ -1,6 +1,6 @@
 # Setup
 
-This document describes the intended development setup for Talibus.
+This document describes the development setup for Talibus.
 
 ## Prerequisites
 
@@ -92,10 +92,16 @@ The suite expects a trained ONNX model and compiled `ring_game_eval` /
 
 ## Optional Debug Logs
 
-By default, the cleaned repo does not write development debug logs. To enable
-best-effort JSONL diagnostics, set:
+By default, Talibus does not write debug logs. To enable best-effort JSONL
+diagnostics, set:
 
 ```bash
 export TALIBUS_DEBUG_LOG=debug/talibus_debug.jsonl
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:TALIBUS_DEBUG_LOG = "debug\talibus_debug.jsonl"
 ```
 

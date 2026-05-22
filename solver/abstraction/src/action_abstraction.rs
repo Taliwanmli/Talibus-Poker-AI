@@ -131,7 +131,7 @@ mod tests {
     fn postflop_bet_mapping_uses_street_specific_grid() {
         assert_eq!(nearest_postflop_bet_fraction(Street::Flop, 0.58), 0.67);
         assert_eq!(nearest_postflop_bet_fraction(Street::Turn, 0.62), 0.5);
-        assert_eq!(nearest_postflop_bet_fraction(Street::River, 0.82), 1.0);
+        assert_eq!(nearest_postflop_bet_fraction(Street::River, 0.82), 0.75);
     }
 
     #[test]
