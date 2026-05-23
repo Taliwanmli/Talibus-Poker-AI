@@ -11,8 +11,8 @@ live poker decision support.
 - Not for overlays, real-time assistance, or RTA workflows.
 - Not for casino or poker-site automation.
 - Not for bypassing platform rules, account restrictions, or fair-play systems.
-- Not for claiming solved poker, guaranteed profitability, human-level strength,
-  solver-level strength, or proven multiplayer Deep CFR convergence.
+- Not for claiming solved poker, real-world profitability, human-level
+  strength, solver-level strength, or proven multiplayer Deep CFR convergence.
 
 ## Intended Uses
 

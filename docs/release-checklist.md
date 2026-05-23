@@ -1,6 +1,10 @@
-# Release Checklist
+# Pre-Release Checklist
 
 Checklist for a public `v0.1 Research Snapshot`.
+
+This checklist is for maintainers preparing a GitHub release. Unchecked items
+indicate manual review tasks before publishing a tagged release, not missing
+core project documentation.
 
 ## Documentation
 

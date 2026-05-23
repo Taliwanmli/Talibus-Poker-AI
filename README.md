@@ -1,6 +1,7 @@
 # Talibus
 
-**AI-assisted 6-max No-Limit Texas Hold'em research prototype.**
+**Research prototype for 6-max No-Limit Texas Hold'em AI systems and
+imperfect-information game evaluation.**
 
 Talibus explores how to build an imperfect-information game AI system around a
 Rust poker simulation/runtime stack, a Deep-CFR-style training pipeline,
@@ -20,6 +21,17 @@ hidden information remains unresolved, including opponents' private cards and
 future actions. Talibus explores how an engine, training pipeline, model
 deployment path, search layer, and evaluation harness can be built around that
 kind of decision problem.
+
+## Status
+
+This is a public research snapshot. Documentation, result-pack interpretation,
+and responsible-use framing are available. Full training artifacts, raw logs,
+large generated buffers, PyTorch checkpoints, and ONNX model binaries are not
+committed because they are large generated files.
+
+The repository is reviewable and buildable in parts. Full long-run
+reproduction requires generated/local artifacts, configured dependencies, and
+substantial compute.
 
 ## Technical Summary
 
@@ -82,7 +94,10 @@ flowchart LR
 - [Responsible Use](docs/responsible-use.md): intended and prohibited uses.
 - [Portfolio Notes](docs/portfolio-notes.md): how to present the project in a
   research or recruiting context.
-- [Release Checklist](docs/release-checklist.md): public snapshot checklist.
+- [Pre-Release Checklist](docs/release-checklist.md): maintainer checklist for
+  publishing the public snapshot.
+- [v0.1 Release Notes](docs/release-notes-v0.1.md): suggested release text for
+  the first public research snapshot.
 - [Roadmap](ROADMAP.md): conservative next steps.
 
 ## Repository Layout
