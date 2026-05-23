@@ -1,11 +1,11 @@
-# 2026-04-03 Laptop Longrun Opt
+# 2026-04-03 6max Longrun Opt
 
 This result pack is a compact public summary of a Talibus 6-max training run
 and final controlled simulator evaluation.
 
 ## Scope
 
-- Training source run: `deep_cfr_6max_laptop_longrun_opt`.
+- Training source run: `deep_cfr_6max_longrun_opt`.
 - Training mode: shared multiseat.
 - Completed iterations: 211.
 - Players: 6.
@@ -36,6 +36,12 @@ The ONNX and PyTorch model files are not committed to Git. See
 The final mixed-table evaluation used 1,000 hands per seat, 200 deck samples,
 a 2,000 ms search budget, and scripted opponents in the order TAG, calling
 station, LAG, nit, TAG.
+
+**Interpretation warning:** the bb/100 values below are controlled simulator
+measurements against scripted baseline opponents. They are useful for
+regression and evaluation inside this codebase only, not as evidence of
+real-money performance, human-level play, solver-level play, or general poker
+strength.
 
 | Seat | bb/100 | Avg decision ms | Avg iterations/decision |
 | ---: | -----: | --------------: | ----------------------: |

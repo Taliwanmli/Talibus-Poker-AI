@@ -1,4 +1,4 @@
-Result pack: 2026-04-03-laptop-longrun-opt
+Result pack: 2026-04-03-6max-longrun-opt
 
 Training entry point:
 python training/deep_cfr/run_deep_cfr.py

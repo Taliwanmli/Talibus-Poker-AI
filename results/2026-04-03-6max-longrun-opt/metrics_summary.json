@@ -1,6 +1,6 @@
 {
     "version":  1,
-    "source_run":  "deep_cfr_6max_laptop_longrun_opt",
+    "source_run":  "deep_cfr_6max_longrun_opt",
     "created_at":  "2026-03-14T05:36:18.865538+00:00",
     "updated_at":  "2026-03-29T23:42:45.355140+00:00",
     "training_config":  {
@@ -28,7 +28,7 @@
                             "traversal_workers_requested":  18,
                             "traversal_fp16_onnx":  true,
                             "device_resolved":  "cuda",
-                            "cuda_device_name":  "NVIDIA GeForce RTX 4080 Laptop GPU"
+                            "cuda_device_name":  "NVIDIA RTX 4080-class GPU"
                         },
     "final_iteration":  {
                             "iteration":  211,

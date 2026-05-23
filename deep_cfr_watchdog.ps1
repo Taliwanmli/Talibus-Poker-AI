@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $repoRoot
 
-$workDir = "data/deep_cfr_6max_laptop_longrun_opt"
+$workDir = "data/deep_cfr_6max_longrun_opt"
 $statePath = Join-Path $repoRoot "$workDir/state.json"
 
 function Get-CompletedIterations {

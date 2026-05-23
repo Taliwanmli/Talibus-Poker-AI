@@ -9,6 +9,6 @@
                       "advantage_onnx":  "advantage_shared.onnx (not committed; see model_artifacts.json)",
                       "strategy_state":  "strategy_shared.pt (not committed)",
                       "advantage_state":  "advantage_shared.pt (not committed)",
-                      "work_dir":  "data/deep_cfr_6max_laptop_longrun_opt (local training run)"
+                      "work_dir":  "data/deep_cfr_6max_longrun_opt (local training run)"
                   }
 }

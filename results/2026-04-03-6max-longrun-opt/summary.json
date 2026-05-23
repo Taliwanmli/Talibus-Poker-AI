@@ -1,6 +1,6 @@
 {
-    "result_pack":  "2026-04-03-laptop-longrun-opt",
-    "source_run":  "deep_cfr_6max_laptop_longrun_opt",
+    "result_pack":  "2026-04-03-6max-longrun-opt",
+    "source_run":  "deep_cfr_6max_longrun_opt",
     "generated_at":  "2026-04-03T19:12:23.367199+00:00",
     "evaluation_type":  "controlled simulator evaluation against scripted baselines",
     "suite_config":  {

@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Sequence
 
 
 REPO_ROOT = Path(__file__).resolve().parent
-DEFAULT_WORK_DIR = REPO_ROOT / "data" / "deep_cfr_6max_laptop_longrun_opt"
+DEFAULT_WORK_DIR = REPO_ROOT / "data" / "deep_cfr_6max_longrun_opt"
 DEFAULT_MODELS_DIR = DEFAULT_WORK_DIR / "models"
 DEFAULT_CHECKPOINT_DIR = DEFAULT_WORK_DIR / "checkpoints"
 DEFAULT_CLUSTER_DIR = REPO_ROOT / "checkpoints" / "nlhe_clusters"

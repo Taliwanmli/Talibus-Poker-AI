@@ -13,9 +13,8 @@ Talibus is a research prototype with important limitations.
 - This project does not prove Deep CFR convergence in multiplayer poker.
 - Some orchestration scripts were developed for a specific local/Windows
   workflow and may need environment-specific adjustment.
-- Real-time search timings depend heavily on hardware, ONNX Runtime setup,
+- Depth-limited search timings depend heavily on hardware, ONNX Runtime setup,
   thread count, and batch settings.
 
 The intended public framing is a Deep-CFR-style 6-max NLHE research prototype,
 not a production poker bot.
-

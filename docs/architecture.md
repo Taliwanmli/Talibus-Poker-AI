@@ -3,6 +3,24 @@
 Talibus is organized around a training-time Deep-CFR-style pipeline and a
 runtime decision pipeline.
 
+## System Flow
+
+```mermaid
+flowchart LR
+    A[Rust NLHE Engine] --> B[Imperfect-Information Wrapper]
+    B --> C[Deep-CFR-style Traversal / Sample Generation]
+    C --> D[PyTorch Training]
+    D --> E[ONNX Export]
+    E --> F[Rust Runtime Inference]
+    F --> G[Depth-Limited Search]
+    G --> H[Evaluation Harness]
+    H --> I[Result Packs]
+```
+
+This diagram shows the research pipeline used inside the repository. The
+runtime/search pieces are for simulator evaluation and experimentation; they
+are not a live-play assistant or poker-site automation system.
+
 ## Game And Abstraction
 
 The Rust workspace in `solver/` contains the game and solver core.
@@ -46,20 +64,25 @@ recent action history.
 ## Model Deployment
 
 Trained PyTorch models are exported to ONNX. The Rust runtime loads these ONNX
-models for inference so evaluation and real-time search can run without Python
-in the decision loop.
+models for inference so evaluation and depth-limited search experiments can run
+without Python in the decision loop.
 
 `solver/deep_cfr/src/onnx_policy.rs` handles ONNX inference and legal-action
 normalization.
 
 ## Runtime Search
 
-`solver/deep_cfr/src/realtime_search.rs` adds depth-limited local search from a
-current game state. The neural policy acts as the baseline/continuation model,
-while the search refines the root decision within a budget.
+`solver/deep_cfr/src/realtime_search.rs` adds experimental depth-limited local
+search from a current simulator state. The neural policy acts as the
+baseline/continuation model, while the search refines the root decision within
+a budget.
+
+Despite the internal file and binary names, this is not documented or intended
+as a real-time poker assistant, overlay, real-money tool, or platform
+automation system.
 
 The relevant binaries are:
 
 - `ring_game_eval`: model-only ring evaluation against scripted opponents.
-- `realtime_play`: real-time-search evaluation and interactive/runtime modes.
-
+- `realtime_play`: depth-limited search evaluation and interactive/runtime
+  experimentation modes.

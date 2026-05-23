@@ -1,9 +1,9 @@
-Result pack: 2026-04-03-laptop-longrun-opt
+Result pack: 2026-04-03-6max-longrun-opt
 
 Recorded environment fields:
 - operating system family: Windows
 - Python training device: cuda
-- GPU: NVIDIA GeForce RTX 4080 Laptop GPU
+- GPU: NVIDIA RTX 4080-class GPU
 - ONNX opset: 17
 - Rust binaries used by the pipeline:
   - run_traversals

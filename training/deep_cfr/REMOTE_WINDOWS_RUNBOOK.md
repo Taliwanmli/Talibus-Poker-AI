@@ -102,9 +102,10 @@ After training, build the release binaries and run:
 python run_eval_suite.py --help
 ```
 
-The evaluation suite can run model-only ring evaluation, real-time search,
-mixed-table tests, seat rotation, opponent comparisons, checkpoint progression,
-and search-budget sweeps depending on the selected arguments.
+The evaluation suite can run model-only ring evaluation, depth-limited runtime
+search experiments, mixed-table tests, seat rotation, opponent comparisons,
+checkpoint progression, and search-budget sweeps depending on the selected
+arguments.
 
 ## Result Packaging
 
