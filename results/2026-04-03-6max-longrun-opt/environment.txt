@@ -1,0 +1,17 @@
+Result pack: 2026-04-03-6max-longrun-opt
+
+Recorded environment fields:
+- operating system family: Windows
+- Python training device: cuda
+- GPU: NVIDIA RTX 4080-class GPU
+- ONNX opset: 17
+- Rust binaries used by the pipeline:
+  - run_traversals
+  - ring_game_eval
+  - realtime_play
+- cluster assets: checkpoints/nlhe_clusters
+
+Timing-sensitive numbers in this pack depend on GPU, CPU, ONNX Runtime,
+threading, and batch settings. The included decision-time and iteration metrics
+should be interpreted as measurements from the recorded run environment, not as
+portable performance guarantees.

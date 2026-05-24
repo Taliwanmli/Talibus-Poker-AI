@@ -1,0 +1,52 @@
+[
+  {
+    "name": "tier_c_baseline",
+    "hidden_dim": 1024,
+    "bottleneck_dim": 512,
+    "traversals": 3000,
+    "training_steps": 240,
+    "buffer_size": 250000,
+    "batch_size": 4096,
+    "deck_samples": 200
+  },
+  {
+    "name": "wider_model",
+    "hidden_dim": 1280,
+    "bottleneck_dim": 640,
+    "traversals": 3000,
+    "training_steps": 240,
+    "buffer_size": 250000,
+    "batch_size": 4096,
+    "deck_samples": 200
+  },
+  {
+    "name": "more_traversal",
+    "hidden_dim": 1024,
+    "bottleneck_dim": 512,
+    "traversals": 4500,
+    "training_steps": 240,
+    "buffer_size": 250000,
+    "batch_size": 4096,
+    "deck_samples": 200
+  },
+  {
+    "name": "more_training_steps",
+    "hidden_dim": 1024,
+    "bottleneck_dim": 512,
+    "traversals": 3000,
+    "training_steps": 360,
+    "buffer_size": 250000,
+    "batch_size": 4096,
+    "deck_samples": 200
+  },
+  {
+    "name": "larger_buffer",
+    "hidden_dim": 1024,
+    "bottleneck_dim": 512,
+    "traversals": 3000,
+    "training_steps": 240,
+    "buffer_size": 400000,
+    "batch_size": 4096,
+    "deck_samples": 200
+  }
+]

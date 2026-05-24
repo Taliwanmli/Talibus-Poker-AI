@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.hypothesis/
+
+# Rust
+target/
+solver/target/
+**/target_opt/
+
+# Local generated artifacts
+data/
+results/**/models/
+results/**/buffers/
+*.onnx
+*.pt
+*.pth
+*.log
+
+# Node/front-end leftovers, if any
+node_modules/
+dist/
+dist-ssr/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+

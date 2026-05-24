@@ -1,0 +1,9 @@
+[package]
+name = "abstraction"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = "0.9"
+rayon = "1.11"
+rs_poker = { version = "4.1.0", default-features = false }

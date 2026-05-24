@@ -1,0 +1,265 @@
+{
+    "version":  1,
+    "source_run":  "deep_cfr_6max_longrun_opt",
+    "created_at":  "2026-03-14T05:36:18.865538+00:00",
+    "updated_at":  "2026-03-29T23:42:45.355140+00:00",
+    "training_config":  {
+                            "mode":  "shared_multiseat",
+                            "configured_iterations":  235,
+                            "completed_iterations":  211,
+                            "traversals_per_iteration":  4500,
+                            "training_steps":  6000,
+                            "batch_size":  4096,
+                            "learning_rate":  0.0005,
+                            "weight_decay":  0.0001,
+                            "dropout_p":  0.1,
+                            "hidden_dim":  1024,
+                            "bottleneck_dim":  512,
+                            "buffer_size":  4000000,
+                            "deck_samples":  200,
+                            "num_players":  6,
+                            "starting_stack":  2000,
+                            "small_blind":  10,
+                            "big_blind":  20,
+                            "seed":  42,
+                            "onnx_opset":  17,
+                            "ring_eval_every":  1,
+                            "ring_eval_hands":  1000,
+                            "traversal_workers_requested":  18,
+                            "traversal_fp16_onnx":  true,
+                            "device_resolved":  "cuda",
+                            "cuda_device_name":  "NVIDIA RTX 4080-class GPU"
+                        },
+    "final_iteration":  {
+                            "iteration":  211,
+                            "timestamp":  "2026-03-29T23:42:45.355126+00:00",
+                            "samples":  {
+                                            "advantage_total_raw":  3610786,
+                                            "advantage_merged":  3610786,
+                                            "strategy_total_raw":  7488088,
+                                            "strategy_merged":  7488088,
+                                            "per_player":  [
+                                                               {
+                                                                   "player":  0,
+                                                                   "advantage":  376356,
+                                                                   "strategy":  736927,
+                                                                   "runtime_profile":  {
+
+                                                                                       }
+                                                               },
+                                                               {
+                                                                   "player":  1,
+                                                                   "advantage":  322061,
+                                                                   "strategy":  645852,
+                                                                   "runtime_profile":  {
+
+                                                                                       }
+                                                               },
+                                                               {
+                                                                   "player":  2,
+                                                                   "advantage":  1370744,
+                                                                   "strategy":  2779161,
+                                                                   "runtime_profile":  {
+
+                                                                                       }
+                                                               },
+                                                               {
+                                                                   "player":  3,
+                                                                   "advantage":  892634,
+                                                                   "strategy":  1791849,
+                                                                   "runtime_profile":  {
+
+                                                                                       }
+                                                               },
+                                                               {
+                                                                   "player":  4,
+                                                                   "advantage":  455349,
+                                                                   "strategy":  1007834,
+                                                                   "runtime_profile":  {
+
+                                                                                       }
+                                                               },
+                                                               {
+                                                                   "player":  5,
+                                                                   "advantage":  193642,
+                                                                   "strategy":  526465,
+                                                                   "runtime_profile":  {
+
+                                                                                       }
+                                                               }
+                                                           ]
+                                        },
+                            "loss":  {
+                                         "advantage":  352.1788635253906,
+                                         "advantage_delta":  -17.517852783203125,
+                                         "strategy":  0.6564350128173828
+                                     },
+                            "training":  {
+                                             "advantage_steps_ran":  5860,
+                                             "advantage_steps_target":  5860,
+                                             "advantage_early_stopped":  false,
+                                             "strategy_steps_ran":  5860,
+                                             "strategy_steps_target":  5860,
+                                             "strategy_early_stopped":  false
+                                         },
+                            "times_sec":  {
+                                              "traverse_total":  1548.5506713999787,
+                                              "traverse_wall":  1548.9031264999649,
+                                              "traverse_sum_seat_time":  1548.5506713999787,
+                                              "train_total":  110.82330590003403,
+                                              "iteration_total":  1782.9877720000222,
+                                              "elapsed_in_run":  26522.60100340005,
+                                              "eta":  57867.49309832738,
+                                              "per_player_traverse":  {
+                                                                          "p0":  258.0917785666631,
+                                                                          "p1":  258.0917785666631,
+                                                                          "p2":  258.0917785666631,
+                                                                          "p3":  258.0917785666631,
+                                                                          "p4":  258.0917785666631,
+                                                                          "p5":  258.0917785666631
+                                                                      },
+                                              "traverse_seat_min":  258.0917785666631,
+                                              "traverse_seat_avg":  258.0917785666631,
+                                              "traverse_seat_max":  258.0917785666631,
+                                              "traverse_seat_ratio_max_to_min":  1.0
+                                          },
+                            "throughput":  {
+                                               "merged_samples_total":  11098874,
+                                               "samples_per_sec_traverse_wall":  7165.634706335685,
+                                               "samples_per_sec_traverse_seat_sum":  7167.265627779542
+                                           },
+                            "reservoir_estimate":  4000000,
+                            "ring_eval":  {
+                                              "status":  "ok",
+                                              "mode":  "vs_opponent",
+                                              "opponent":  "tag",
+                                              "hands":  1000,
+                                              "seed":  492717789569,
+                                              "num_players":  6,
+                                              "model_seat":  0,
+                                              "model_bb_per_hand":  0.6274,
+                                              "model_bb_per_100":  62.74,
+                                              "per_seat_bb_per_hand":  [
+                                                                           0.6274,
+                                                                           -0.3593,
+                                                                           0.87525,
+                                                                           -0.35065,
+                                                                           -0.0569,
+                                                                           -0.7358
+                                                                       ],
+                                              "per_seat_bb_per_100":  [
+                                                                          62.74,
+                                                                          -35.93,
+                                                                          87.525,
+                                                                          -35.065,
+                                                                          -5.69,
+                                                                          -73.58
+                                                                      ],
+                                              "model_wins":  418,
+                                              "model_losses":  582,
+                                              "ties":  0,
+                                              "zero_sum_check_bb_per_hand":  0.0,
+                                              "elapsed_sec":  1.587,
+                                              "workers":  4,
+                                              "deck_samples":  200,
+                                              "iteration":  211
+                                          },
+                            "ring_policy_tracking":  {
+                                                         "status":  "ok",
+                                                         "window_size":  5,
+                                                         "margin_bb_per_100":  10.0,
+                                                         "sample_count_tag":  194,
+                                                         "smoothed_tag_bb_per_100":  -33.064,
+                                                         "composite_bb_per_100":  -33.064,
+                                                         "best_composite_bb_per_100_before":  41.945,
+                                                         "best_iteration_before":  154,
+                                                         "promoted":  false,
+                                                         "best_composite_bb_per_100_after":  41.945,
+                                                         "best_iteration_after":  154
+                                                     }
+                        },
+    "best_ring_promotion":  {
+                                "version":  1,
+                                "window_size":  5,
+                                "promotion_margin_bb_per_100":  10.0,
+                                "best_composite_bb_per_100":  41.945,
+                                "best_iteration":  154,
+                                "latest_history":  [
+                                                       {
+                                                           "iteration":  202,
+                                                           "timestamp":  "2026-03-29T17:27:56.811998+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -45.2,
+                                                           "composite_bb_per_100":  -7.219999999999997
+                                                       },
+                                                       {
+                                                           "iteration":  203,
+                                                           "timestamp":  "2026-03-29T18:20:29.921572+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -120.435,
+                                                           "composite_bb_per_100":  -37.851
+                                                       },
+                                                       {
+                                                           "iteration":  204,
+                                                           "timestamp":  "2026-03-29T18:57:44.552515+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  14.76,
+                                                           "composite_bb_per_100":  -8.072
+                                                       },
+                                                       {
+                                                           "iteration":  205,
+                                                           "timestamp":  "2026-03-29T19:59:06.302532+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -66.225,
+                                                           "composite_bb_per_100":  -28.187
+                                                       },
+                                                       {
+                                                           "iteration":  206,
+                                                           "timestamp":  "2026-03-29T20:26:44.809336+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -13.525,
+                                                           "composite_bb_per_100":  -46.125
+                                                       },
+                                                       {
+                                                           "iteration":  207,
+                                                           "timestamp":  "2026-03-29T21:04:29.297072+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -97.14,
+                                                           "composite_bb_per_100":  -56.513
+                                                       },
+                                                       {
+                                                           "iteration":  208,
+                                                           "timestamp":  "2026-03-29T21:50:40.190093+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -18.775,
+                                                           "composite_bb_per_100":  -36.181
+                                                       },
+                                                       {
+                                                           "iteration":  209,
+                                                           "timestamp":  "2026-03-29T22:27:55.424714+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  0.095,
+                                                           "composite_bb_per_100":  -39.114
+                                                       },
+                                                       {
+                                                           "iteration":  210,
+                                                           "timestamp":  "2026-03-29T23:12:34.112978+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  -112.24,
+                                                           "composite_bb_per_100":  -48.317
+                                                       },
+                                                       {
+                                                           "iteration":  211,
+                                                           "timestamp":  "2026-03-29T23:42:45.330290+00:00",
+                                                           "tag_status":  "ok",
+                                                           "tag_bb_per_100":  62.74,
+                                                           "composite_bb_per_100":  -33.064
+                                                       }
+                                                   ]
+                            },
+    "notes":  [
+                  "This is a compact public summary derived from the local metrics.json file.",
+                  "Large buffers, PyTorch checkpoints, ONNX files, and raw logs are intentionally not included.",
+                  "Ring evaluation values are simulator measurements against scripted opponents and should not be read as solver convergence or human-play strength."
+              ]
+}

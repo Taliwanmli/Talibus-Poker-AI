@@ -1,0 +1,8 @@
+results.csv
+results_*.csv
+trace.jsonl
+report.json
+biggest_losers.jsonl
+runs/
+runs_*/
+__pycache__/

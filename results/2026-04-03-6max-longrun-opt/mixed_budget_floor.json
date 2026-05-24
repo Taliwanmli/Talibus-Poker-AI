@@ -1,0 +1,65 @@
+{
+    "config":  {
+                   "adaptive_budget":  false,
+                   "batch_queue_capacity":  8192,
+                   "batch_size":  128,
+                   "batch_wait_us":  50,
+                   "budget_ms":  500,
+                   "deck_samples":  200,
+                   "hands":  1000,
+                   "model_seat":  0,
+                   "num_players":  6,
+                   "opponents":  [
+                                     "tag",
+                                     "calling-station",
+                                     "lag",
+                                     "nit",
+                                     "tag"
+                                 ],
+                   "seed":  999,
+                   "threads":  24
+               },
+    "generated_at":  "2026-04-03T19:12:23.366644+00:00",
+    "runs":  [
+                 {
+                     "seat":  0,
+                     "model_seat":  0,
+                     "opponents":  [
+                                       "tag",
+                                       "calling_station",
+                                       "lag",
+                                       "nit",
+                                       "tag"
+                                   ],
+                     "configured_opponents":  [
+                                                  "tag",
+                                                  "calling-station",
+                                                  "lag",
+                                                  "nit",
+                                                  "tag"
+                                              ],
+                     "hands":  1000,
+                     "seed":  999,
+                     "budget_ms":  500,
+                     "average_budget_ms":  500.0,
+                     "average_decision_ms":  1152.7236842105262,
+                     "average_infosets_per_decision":  4974.749512670565,
+                     "average_iterations_per_decision":  35459.14376218324,
+                     "hands_per_second":  0.42226824834462684,
+                     "model_bb_per_100":  4747.524999999995,
+                     "model_bb_per_hand":  47.47524999999995,
+                     "model_wins":  259,
+                     "model_losses":  741,
+                     "ties":  0,
+                     "per_seat_bb_per_100":  [
+                                                 4747.524999999995,
+                                                 169.7749999999999,
+                                                 -3825.169999999999,
+                                                 -1569.8749999999989,
+                                                 364.045,
+                                                 113.70000000000002
+                                             ],
+                     "zero_sum_check_bb_per_hand":  -2.0236257114447652E-14
+                 }
+             ]
+}

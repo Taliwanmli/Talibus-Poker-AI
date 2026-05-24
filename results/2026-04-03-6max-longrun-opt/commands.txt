@@ -1,0 +1,38 @@
+Result pack: 2026-04-03-6max-longrun-opt
+
+Training entry point:
+python training/deep_cfr/run_deep_cfr.py
+
+Training configuration recorded in metrics_summary.json:
+- mode: shared_multiseat
+- configured iterations: 235
+- completed iterations: 211
+- traversals per iteration: 4500
+- training steps: 6000
+- batch size: 4096
+- learning rate: 0.0005
+- weight decay: 0.0001
+- dropout: 0.1
+- hidden dimension: 1024
+- bottleneck dimension: 512
+- buffer size: 4000000
+- seed: 42
+- ONNX opset: 17
+
+Evaluation entry point:
+python run_eval_suite.py
+
+Final mixed-table evaluation configuration recorded in summary.json:
+- 6 players
+- blinds: 10/20
+- starting stack: 2000
+- deck samples: 200
+- 1000 hands per seat
+- 2000 ms search budget for the six-seat rotation
+- 500 ms search budget for the budget-floor run
+- scripted opponents: tag, calling-station, lag, nit, tag
+- model artifact: strategy_shared_best_ring.onnx
+
+The original terminal transcript is not included. The JSON files in this
+directory preserve the public reproducibility fields without local absolute
+paths or raw logs.
