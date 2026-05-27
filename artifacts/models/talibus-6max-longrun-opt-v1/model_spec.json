@@ -1,0 +1,108 @@
+{
+  "release_id": "talibus-6max-longrun-opt-v1",
+  "published_date": "2026-05-27",
+  "source_result_pack": "results/2026-04-03-6max-longrun-opt",
+  "training_run_id": "deep_cfr_6max_longrun_opt",
+  "training_method": "Deep-CFR-style traversal and neural strategy/advantage training",
+  "game": {
+    "type": "6-max No-Limit Texas Hold'em",
+    "num_players": 6,
+    "evaluation_blinds": {
+      "small_blind": 10,
+      "big_blind": 20
+    },
+    "evaluation_starting_stack": 2000
+  },
+  "abstraction": {
+    "max_action_slots": 13,
+    "preflop_open_raise_bb_multiples": [2.0, 2.5, 3.0, 3.5],
+    "preflop_reraise_multipliers": [2.0, 2.3, 2.7, 3.2, 4.0],
+    "flop_bet_pot_fractions": [0.33, 0.67, 1.0, 1.5],
+    "turn_bet_pot_fractions": [0.5, 0.75, 1.0, 1.5],
+    "river_bet_pot_fractions": [0.33, 0.75, 1.25, 2.0],
+    "flop_raise_multipliers": [2.0, 2.5, 3.0, 3.5, 4.5],
+    "turn_raise_multipliers": [2.0, 2.5, 3.0, 3.75, 5.0],
+    "river_raise_multipliers": [1.8, 2.3, 3.0, 4.0, 5.5],
+    "card_and_board_assets": "checkpoints/nlhe_clusters"
+  },
+  "training_config": {
+    "completed_iterations": 211,
+    "configured_iterations": 235,
+    "traversals_per_iteration": 4500,
+    "training_steps": 6000,
+    "batch_size": 4096,
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0001,
+    "dropout_p": 0.1,
+    "buffer_size": 4000000,
+    "seed": 42,
+    "device_class": "CUDA GPU"
+  },
+  "network": {
+    "input_dim": 510,
+    "hidden_dim": 1024,
+    "bottleneck_dim": 512,
+    "max_actions": 13,
+    "architecture_summary": "Dense PyTorch network with Linear, LayerNorm, ReLU, and Dropout blocks, exported to ONNX for Rust-side inference."
+  },
+  "onnx": {
+    "opset": 17,
+    "inputs": [
+      {
+        "name": "input",
+        "dtype": "float32",
+        "shape": ["batch", 510]
+      },
+      {
+        "name": "action_mask",
+        "dtype": "float32",
+        "shape": ["batch", 13]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "output",
+        "dtype": "float32",
+        "shape": ["batch", 13]
+      }
+    ],
+    "export_path": "training/deep_cfr/train.py::export_onnx",
+    "runtime": "Rust ort crate / ONNX Runtime",
+    "rust_ort_crate_version": "2.0.0-rc.11",
+    "minimum_onnx_runtime_version_for_rust": "1.23.x"
+  },
+  "artifacts": [
+    {
+      "file": "strategy_shared_best_ring.onnx",
+      "role": "strategy policy used by the published mixed-table evaluation",
+      "output_semantics": "masked strategy probabilities over action slots",
+      "size_bytes": 16854867,
+      "last_modified_utc": "2026-03-26T04:27:50.9233308Z",
+      "sha256": "b3473f08c0dda9611babaa14f646b2ec5bb0d28b225fc10f599a45b472842af2"
+    },
+    {
+      "file": "advantage_shared_best_ring.onnx",
+      "role": "paired advantage model from the best-ring promotion snapshot",
+      "output_semantics": "masked advantage/action-value vector for regret-matching style policy conversion",
+      "size_bytes": 16854771,
+      "last_modified_utc": "2026-03-26T04:25:26.4345891Z",
+      "sha256": "70a3b7d4b314be22e02fa5f47127d0fa832cd899f6a3fbee3c8b1a7ec5fe4875"
+    }
+  ],
+  "evaluation_summary": {
+    "benchmark": "controlled simulator mixed-table seat rotation against scripted baselines",
+    "hands_per_seat": 1000,
+    "deck_samples": 200,
+    "search_budget_ms": 2000,
+    "opponents": ["tag", "calling-station", "lag", "nit", "tag"],
+    "seat_bb_per_100": [4539.885, 5498.015, 3664.615, 5205.47, 4923.275, 6222.16],
+    "average_bb_per_100": 5008.903,
+    "confidence_intervals": "not available in the included result pack"
+  },
+  "limitations": [
+    "Results are controlled simulator measurements against scripted baselines.",
+    "The metrics do not imply real-money performance, human-level strength, solver-level strength, or superhuman play.",
+    "The project does not prove Deep CFR convergence in multiplayer poker.",
+    "Full long-run reproduction still requires compute and generated training data not stored in Git."
+  ]
+}

@@ -12,10 +12,12 @@ and final controlled simulator evaluation.
 - Blinds: 10/20.
 - Starting stack: 2,000 chips.
 - Evaluation type: simulator evaluation against scripted opponents.
-- Model artifact: `strategy_shared_best_ring.onnx`.
+- Model artifact:
+  `artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx`.
 
-The ONNX and PyTorch model files are not committed to Git. See
-`model_artifacts.json` for file names, sizes, timestamps, and SHA-256 hashes.
+The strategy and advantage ONNX artefacts are published under
+`artifacts/models/talibus-6max-longrun-opt-v1/`. PyTorch checkpoints, raw
+buffers, fp16 alternates, and raw logs are not included.
 
 ## Files
 

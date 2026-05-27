@@ -20,6 +20,10 @@ results/**/buffers/
 *.pth
 *.log
 
+# Published model release artefacts
+!artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx
+!artifacts/models/talibus-6max-longrun-opt-v1/advantage_shared_best_ring.onnx
+
 # Node/front-end leftovers, if any
 node_modules/
 dist/

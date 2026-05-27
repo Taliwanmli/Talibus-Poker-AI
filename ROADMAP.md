@@ -7,9 +7,10 @@ not a production poker bot or live-play assistant.
 
 - Current Rust/Python architecture documented.
 - Public result pack documented and linked.
+- Best-ring ONNX strategy and advantage models released with checksums.
 - Setup and smoke-check commands available.
 - Limitations and responsible-use boundaries published.
-- No large private artifacts, raw logs, or model checkpoints committed.
+- No large raw buffers, private logs, or PyTorch checkpoints committed.
 
 ## v0.2 Reproducibility Improvements
 

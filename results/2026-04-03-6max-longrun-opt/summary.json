@@ -19,7 +19,7 @@
                                                        "tag"
                                                    ],
                          "model_seat":  0,
-                         "model_artifact":  "strategy_shared_best_ring.onnx (not committed; see model_artifacts.json)",
+                         "model_artifact":  "artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx",
                          "cluster_assets":  "checkpoints/nlhe_clusters"
                      },
     "mixed_budget_floor":  [

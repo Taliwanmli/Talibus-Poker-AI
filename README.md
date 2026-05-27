@@ -25,38 +25,52 @@ kind of decision problem.
 ## Status
 
 This is a public research snapshot. Documentation, result-pack interpretation,
-and responsible-use framing are available. Large generated buffers, raw logs,
-PyTorch checkpoints, and ONNX model binaries are not committed directly to Git
-because they are generated artifacts.
+responsible-use framing, compact result evidence, and trained ONNX model
+artefacts are available. Large generated buffers, raw logs, and PyTorch
+checkpoints are excluded because they are generated artefacts.
 
-The trained ONNX artifacts, model specifications, and evaluation/performance
-metrics are scheduled for public release on Tuesday 26 May 2026 as separately
-managed release artifacts. The repository currently focuses on the
-implementation, training/export pipeline, evaluation harnesses, compact result
-evidence, and documentation.
+The repository includes the released Talibus 6-max long-run ONNX models under
+`artifacts/models/talibus-6max-longrun-opt-v1/`, together with model
+specifications, SHA-256 hashes, and usage instructions.
 
 The repository is reviewable and buildable in parts. Full long-run reproduction
-requires generated/local artifacts, configured dependencies, and substantial
+requires generated training data, configured dependencies, and substantial
 compute.
 
-## Model Release Status
+## Trained Model Release
 
-The trained model artifacts are not currently tracked directly in Git. This is
-a release-management decision: large binary artifacts are handled separately
-from normal source commits to avoid bloating Git history and to keep the source
-repository lightweight and auditable.
+The public model release is:
 
-The planned Tuesday 26 May 2026 public model release is expected to include:
+`artifacts/models/talibus-6max-longrun-opt-v1/`
 
-- exported ONNX model artifacts,
-- model/specification metadata,
-- artifact hashes/checksums,
-- evaluation metrics against scripted opponent profiles,
-- instructions for loading and running the released model.
+It contains:
 
-The scheduled model package should be interpreted as research-prototype
-evidence and reproducibility support, not as a production poker bot or claim of
-real-world poker strength.
+- `strategy_shared_best_ring.onnx`: the default released strategy model used
+  for the published mixed-table evaluation.
+- `advantage_shared_best_ring.onnx`: the paired advantage model from the same
+  best-ring promotion snapshot.
+- `model_spec.json`: machine-readable model, abstraction, training, ONNX, and
+  evaluation metadata.
+- `SHA256SUMS`: checksums for the ONNX artefacts.
+
+The trained model should be interpreted as research-prototype evidence and
+reproducibility support, not as a production poker bot or claim of real-world
+poker strength.
+
+## Published Controlled Benchmark
+
+The released strategy model is tied to the compact result pack at
+`results/2026-04-03-6max-longrun-opt/`.
+
+In that controlled simulator benchmark, Talibus was evaluated across all six
+seats in 1,000-hand mixed-table runs with a 2,000 ms depth-limited-search
+budget, 200 deck samples, and scripted opponents in the order TAG, calling
+station, LAG, nit, TAG. Within that setup, the seat results ranged from
+3664.615 to 6222.160 bb/100, averaging 5008.903 bb/100.
+
+Those are strong results for this scripted simulator setting, but they are not
+evidence of real-money profitability, human-level strength, commercial solver
+quality, or superhuman play.
 
 ## Technical Summary
 
@@ -114,6 +128,8 @@ flowchart LR
   of the system, evaluation framing, reproducibility boundaries, and
   responsible-use context.
 - [Setup](docs/setup.md): installation, checks, and common commands.
+- [Model Release](docs/model_release.md): released ONNX artefacts, tensor
+  shapes, hashes, usage commands, and metric interpretation.
 - [Evaluation](docs/evaluation.md): evaluation harnesses and published result
   pack interpretation.
 - [Limitations](docs/limitations.md): scope, caveats, and claims this project
@@ -137,11 +153,9 @@ deep_cfr_watchdog.ps1          Windows helper for long training runs
 ```
 
 Large generated buffers, raw logs, PyTorch checkpoints, and ONNX model binaries
-are not committed directly to Git. The trained ONNX artifacts, model
-specifications, and evaluation/performance metrics are scheduled for public
-release on Tuesday 26 May 2026 as separate release artifacts. The included
-result pack records model metadata and SHA-256 hashes for the local artifacts
-used to produce the published evaluation.
+outside the published model package are not committed directly to Git. The
+included result pack records model metadata and SHA-256 hashes for the
+artefacts used to produce the published evaluation.
 
 ## Quick Start
 
@@ -188,13 +202,13 @@ verification checklist.
 
 ## Quick Verification / Smoke Checks
 
-There is not currently a true 5-minute end-to-end trained-model demo from the
-source tree alone because full training/evaluation depends on generated local
-artifacts, abstraction assets, trained ONNX models, and substantial compute.
-The trained ONNX artifacts are scheduled for separate public release on Tuesday
-26 May 2026.
-The closest lightweight verification is to check that the Python modules parse,
-the evaluation CLIs are discoverable, and the fast evaluation tests pass.
+The repository includes a trained ONNX strategy model, so users can run a
+small scripted-opponent smoke evaluation after building the Rust runtime
+binaries. Full long-run reproduction still requires generated training data and
+substantial compute.
+
+The lightweight source checks below verify that the Python modules parse, the
+evaluation CLIs are discoverable, and the fast evaluation tests pass.
 
 After installing the Python requirements, run from the repository root:
 
@@ -214,6 +228,19 @@ python3 -m unittest discover eval
 On systems where `python` points to Python 3, use `python` instead of
 `python3`. These commands do not start long training jobs, do not require a
 trained ONNX model, and do not generate large artifacts.
+
+After building the Rust binaries, a short trained-model smoke run can be
+started from the repository root:
+
+```bash
+solver/target/release/ring_game_eval \
+  --model artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx \
+  --policy strategy \
+  --cluster-dir checkpoints/nlhe_clusters \
+  --num-players 6 \
+  --hands 100 \
+  --opponent tag
+```
 
 ## Training
 
@@ -247,7 +274,7 @@ Included public result pack:
 - `results/2026-04-03-6max-longrun-opt/`
 
 That pack contains a sanitized summary of a 6-max mixed-table simulator
-evaluation using the local `strategy_shared_best_ring.onnx` artifact. The six
+evaluation using the released `strategy_shared_best_ring.onnx` artifact. The six
 seat-rotation runs used 1,000 hands per seat, a 2,000 ms search budget, 200 deck
 samples, and scripted mixed opponents: TAG, calling station, LAG, nit, TAG.
 

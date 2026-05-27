@@ -17,6 +17,8 @@ tool, casino automation tool, or platform-rule bypass tool.
 - Setup notes and smoke-check commands.
 - Controlled simulator evaluation documentation.
 - Compact public result-pack explanation.
+- Trained best-ring ONNX strategy and advantage models.
+- Model specification, checksums, and usage documentation.
 - Limitations and responsible-use guidance.
 - Roadmap and lightweight contributor guidance.
 
@@ -25,18 +27,13 @@ tool, casino automation tool, or platform-rule bypass tool.
 - Full generated training buffers.
 - Raw training or evaluation logs.
 - PyTorch checkpoints tracked directly in Git.
-- ONNX model binaries tracked directly in Git.
+- Non-release ONNX alternates and intermediate checkpoints.
 - Large local artifacts required for full long-run reproduction.
 
 These files are intentionally excluded because they are generated artifacts and
 can be large. Full long-run reproduction requires generated/local artifacts,
-configured dependencies, and substantial compute.
-
-The trained ONNX artifacts, model specifications, and evaluation/performance
-metrics are scheduled for public release on Tuesday 26 May 2026 as separately
-managed release artifacts. The planned model package should include exported
-ONNX artifacts, model/specification metadata, hashes/checksums, evaluation
-metrics against scripted opponent profiles, and loading/running instructions.
+configured dependencies, and substantial compute. The released ONNX artefacts
+are under `artifacts/models/talibus-6max-longrun-opt-v1/`.
 
 ## Responsible Use
 
@@ -61,7 +58,7 @@ solver-level play, or general poker strength.
 Initial public research snapshot of Talibus, a 6-max No-Limit Texas Hold'em AI
 systems research prototype. Includes Rust/Python architecture documentation,
 setup notes, controlled simulator evaluation documentation, a compact public
-result-pack explanation, limitations, responsible-use guidance, roadmap, and
-contributor notes. This release is for research, education, and technical review
-only; it is not a production poker bot, real-money poker tool, live-play
-assistant, or poker-strength claim.
+result-pack explanation, released ONNX model artefacts, limitations,
+responsible-use guidance, roadmap, and contributor notes. This release is for
+research, education, and technical review only; it is not a production poker
+bot, real-money poker tool, live-play assistant, or poker-strength claim.

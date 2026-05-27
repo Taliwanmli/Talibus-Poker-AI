@@ -30,10 +30,9 @@ The suite expects:
 - abstraction clusters under `checkpoints/nlhe_clusters`,
 - a writable `data/` directory for generated outputs.
 
-The trained ONNX artifacts, model specifications, and evaluation/performance
-metrics are scheduled for public release on Tuesday 26 May 2026 as separately
-managed release artifacts. They are not tracked directly in Git to keep source
-history lightweight.
+The released ONNX artefacts and model specifications are under
+`artifacts/models/talibus-6max-longrun-opt-v1/`. The default runtime artefact is
+`strategy_shared_best_ring.onnx`.
 
 ## Expected Result Files
 
@@ -90,8 +89,8 @@ The mixed-table seat-rotation evaluation used:
 - 1,000 hands per seat.
 - 2,000 ms search budget.
 - Scripted opponents: TAG, calling station, LAG, nit, TAG.
-- Model artifact: `strategy_shared_best_ring.onnx`, scheduled for separate
-  public artifact release rather than direct Git tracking.
+- Model artifact:
+  `artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx`.
 
 Observed seat bb/100 values:
 

@@ -10,9 +10,10 @@ This document describes the development setup for Talibus.
 - Enough disk space for generated `data/` artifacts if running training.
 - Optional CUDA-capable GPU for larger PyTorch training runs.
 
-The Rust runtime uses the `ort` crate for ONNX inference. Depending on the
-platform, ONNX Runtime may need to be installed or made available through a
-dynamic-library path before running binaries that load `.onnx` models.
+The Rust runtime uses `ort` 2.0.0-rc.11 for ONNX inference. Use ONNX Runtime
+1.23.x or newer, and make the shared library available to the binaries if it
+is not on the platform library path. For example, set `ORT_DYLIB_PATH` to the
+ONNX Runtime shared library before running binaries that load `.onnx` models.
 
 ## Python Environment
 
@@ -51,11 +52,10 @@ cargo build --release -p deep_cfr --bin realtime_play
 
 ## Smoke Checks
 
-There is not currently a true 5-minute end-to-end trained-model demo in the
-source tree alone. Full long-run training/evaluation requires generated local
-artifacts, abstraction assets, trained ONNX models, and substantial compute.
-The trained ONNX artifacts, model specifications, and evaluation/performance
-metrics are scheduled for separate public release on Tuesday 26 May 2026.
+The repository includes a trained ONNX strategy model under
+`artifacts/models/talibus-6max-longrun-opt-v1/`. Full long-run
+training/evaluation still requires generated local artifacts and substantial
+compute, but lightweight source and model smoke checks are available.
 
 The checks below are the closest lightweight verification path. They verify
 that key Python modules parse, command-line entry points are discoverable, and
@@ -132,8 +132,39 @@ python run_eval_suite.py --help
 ```
 
 The suite expects a trained ONNX model and compiled `ring_game_eval` /
-`realtime_play` binaries. The trained ONNX artifacts are scheduled for separate
-public release on Tuesday 26 May 2026 rather than being tracked directly in Git.
+`realtime_play` binaries. The released strategy model is:
+
+```text
+artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx
+```
+
+After building the Rust binaries, run a short scripted-opponent model smoke
+test from the repository root:
+
+```bash
+export ORT_DYLIB_PATH=/path/to/libonnxruntime.so
+solver/target/release/ring_game_eval \
+  --model artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx \
+  --policy strategy \
+  --cluster-dir checkpoints/nlhe_clusters \
+  --num-players 6 \
+  --hands 100 \
+  --opponent tag
+```
+
+On Windows PowerShell, set `ORT_DYLIB_PATH` to the compatible
+`onnxruntime.dll` if the DLL is not already discoverable:
+
+```powershell
+$env:ORT_DYLIB_PATH = "<path-to-onnxruntime.dll>"
+.\solver\target\release\ring_game_eval.exe `
+  --model .\artifacts\models\talibus-6max-longrun-opt-v1\strategy_shared_best_ring.onnx `
+  --policy strategy `
+  --cluster-dir .\checkpoints\nlhe_clusters `
+  --num-players 6 `
+  --hands 100 `
+  --opponent tag
+```
 
 ## Optional Debug Logs
 

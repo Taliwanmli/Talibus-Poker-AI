@@ -1,48 +1,23 @@
 {
-  "version": 1,
-  "note": "Model binaries are intentionally not committed to Git. Use GitHub Releases or Git LFS if these artifacts are distributed.",
+  "version": 2,
+  "note": "The best-ring ONNX artefacts used by this result pack are published under artifacts/models/talibus-6max-longrun-opt-v1.",
+  "release_directory": "artifacts/models/talibus-6max-longrun-opt-v1",
   "artifacts": [
     {
       "name": "strategy_shared_best_ring.onnx",
+      "published_path": "artifacts/models/talibus-6max-longrun-opt-v1/strategy_shared_best_ring.onnx",
       "role": "strategy model used for the final mixed-table result pack",
       "size_bytes": 16854867,
       "last_modified_utc": "2026-03-26T04:27:50.9233308Z",
-      "sha256": "B3473F08C0DDA9611BABAA14F646B2EC5BB0D28B225FC10F599A45B472842AF2"
+      "sha256": "b3473f08c0dda9611babaa14f646b2ec5bb0d28b225fc10f599a45b472842af2"
     },
     {
       "name": "advantage_shared_best_ring.onnx",
+      "published_path": "artifacts/models/talibus-6max-longrun-opt-v1/advantage_shared_best_ring.onnx",
       "role": "paired advantage model from the best-ring promotion snapshot",
       "size_bytes": 16854771,
       "last_modified_utc": "2026-03-26T04:25:26.4345891Z",
-      "sha256": "70A3B7D4B314BE22E02FA5F47127D0FA832CD899F6A3FBEE3C8B1A7EC5FE4875"
-    },
-    {
-      "name": "strategy_shared.onnx",
-      "role": "latest strategy ONNX from the recorded local run",
-      "size_bytes": 16854867,
-      "last_modified_utc": "2026-03-29T23:42:42.8835542Z",
-      "sha256": "DD3504F0C64ADD785ED80D8DB63F72F9BBD4EE825C47A02F9728ABC2B4F13D98"
-    },
-    {
-      "name": "advantage_shared.onnx",
-      "role": "latest advantage ONNX from the recorded local run",
-      "size_bytes": 16854771,
-      "last_modified_utc": "2026-03-29T23:41:13.3729094Z",
-      "sha256": "58F51FC18BB679BB7D0B1A9D47BBFD004CD75830A27F8FE844D05FD8B063AA78"
-    },
-    {
-      "name": "strategy_shared.fp16.onnx",
-      "role": "latest fp16 strategy ONNX from the recorded local run",
-      "size_bytes": 8430890,
-      "last_modified_utc": "2026-03-29T23:42:43.0535359Z",
-      "sha256": "5C843705E8979D021A5231218C11EE945147209C5A932A73BBA86F4E0ADFD518"
-    },
-    {
-      "name": "advantage_shared.fp16.onnx",
-      "role": "latest fp16 advantage ONNX from the recorded local run",
-      "size_bytes": 8430748,
-      "last_modified_utc": "2026-03-29T23:41:13.5654634Z",
-      "sha256": "9A7E7662728E4B774C971CA9E4B3204683795B8B0F3757E6BA5F9B7AF0DE44C0"
+      "sha256": "70a3b7d4b314be22e02fa5f47127d0fa832cd899f6a3fbee3c8b1a7ec5fe4875"
     }
   ]
 }

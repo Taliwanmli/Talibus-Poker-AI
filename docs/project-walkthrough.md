@@ -99,10 +99,11 @@ Talibus trains models in Python/PyTorch and exports them to ONNX so the Rust
 runtime can load models for inference, evaluation, and depth-limited search
 experiments without keeping Python in the decision loop.
 
-The public result pack records ONNX artifact names, sizes, and SHA-256 hashes.
-The trained ONNX artifacts, model specifications, and evaluation/performance
-metrics are scheduled for public release on Tuesday 26 May 2026 as separately
-managed release artifacts rather than normal source commits.
+The public model release is under
+`artifacts/models/talibus-6max-longrun-opt-v1/`. It includes the
+`strategy_shared_best_ring.onnx` strategy model, the paired
+`advantage_shared_best_ring.onnx` model, model specifications, and SHA-256
+hashes.
 
 ## Evaluation Approach
 
@@ -159,28 +160,21 @@ from the source tree alone without additional local/generated artifacts.
 Not fully reproducible from the public checkout alone:
 
 - full long-run training,
-- exact ONNX model inference from the recorded result pack until the scheduled
-  model artifacts are published,
 - full result-pack generation.
 
 The reasons are practical: large generated buffers, raw logs, PyTorch
-checkpoints, ONNX model binaries, and some long-run artifacts are managed
-outside normal Git commits. Full reproduction also needs configured
-dependencies, abstraction assets, local generated data, and substantial compute.
+checkpoints, and some long-run artifacts are not source files. Full
+reproduction also needs configured dependencies, abstraction assets, local
+generated data, and substantial compute.
 
 ## Why Large Artifacts Are Not Committed
 
 Training buffers, raw logs, checkpoints, and model binaries can be large and
-are generated artifacts rather than source. The public result pack includes
-compact summaries, configuration notes, environment notes, and model artifact
-hashes.
-
-The trained ONNX artifacts, model specifications, and evaluation/performance
-metrics are scheduled for public release on Tuesday 26 May 2026 as a separate
-artifact package. The expected release package should include exported ONNX
-artifacts, model/specification metadata, checksums, evaluation metrics against
-scripted opponent profiles, and instructions for loading/running the released
-model.
+are generated artifacts rather than source. This repository includes only the
+compact ONNX artefacts needed for the public model release. Raw buffers, raw
+logs, and PyTorch checkpoint files remain excluded. The public result pack
+includes compact summaries, configuration notes, environment notes, and model
+artifact hashes.
 
 Future work may improve packaging and reproducibility with smaller demo configs,
 validation scripts, and better artifact publication.
