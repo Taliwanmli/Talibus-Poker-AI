@@ -511,12 +511,21 @@ fn board_texture_bucket(game: &NlheGame, board_texture_cache: &DashMap<u64, u16>
     }
     let active_players = game.players.iter().filter(|p| !p.folded).count().max(2);
     let opponent_count = active_players.saturating_sub(1).max(1);
-    let cache_key = hash_value(&(street_code(game.round), game.board.as_slice(), opponent_count));
+    let cache_key = hash_value(&(
+        street_code(game.round),
+        game.board.as_slice(),
+        opponent_count,
+    ));
     if let Some(bucket) = board_texture_cache.get(&cache_key) {
         return *bucket;
     }
 
-    let board = game.board.iter().copied().map(to_rs_card).collect::<Vec<_>>();
+    let board = game
+        .board
+        .iter()
+        .copied()
+        .map(to_rs_card)
+        .collect::<Vec<_>>();
     let seed = cache_key ^ 0x5BAA_9D17_3E6C_C2F1;
     let board_equity = compute_board_texture_equity_multiway_with_seed(
         &board,
@@ -1212,7 +1221,9 @@ mod tests {
             .expect("check should close preflop after limp");
 
         assert_eq!(game_for_flop.round, BettingRound::Flop);
-        let flop_actor = game_for_flop.current_actor().expect("flop should have an actor");
+        let flop_actor = game_for_flop
+            .current_actor()
+            .expect("flop should have an actor");
         let flop_slots = enumerate_action_space(game_for_flop, flop_actor)
             .iter()
             .map(|a| a.policy_slot)

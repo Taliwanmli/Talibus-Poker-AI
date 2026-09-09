@@ -61,11 +61,27 @@ impl NitPolicy {
         match game.round {
             BettingRound::Preflop => {
                 let tier = classify_preflop_tier(game.players[player_idx].hole_cards);
-                apply_preflop_weights(&mut weights, &action_space, tier, to_call, pressure, spr, pot);
+                apply_preflop_weights(
+                    &mut weights,
+                    &action_space,
+                    tier,
+                    to_call,
+                    pressure,
+                    spr,
+                    pot,
+                );
             }
             BettingRound::Flop | BettingRound::Turn | BettingRound::River => {
                 let class = classify_postflop_strength(game, player_idx);
-                apply_postflop_weights(&mut weights, &action_space, class, to_call, pressure, spr, pot);
+                apply_postflop_weights(
+                    &mut weights,
+                    &action_space,
+                    class,
+                    to_call,
+                    pressure,
+                    spr,
+                    pot,
+                );
             }
             BettingRound::Complete => {
                 return Err("nit policy queried for completed game".to_string());

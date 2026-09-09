@@ -601,7 +601,8 @@ fn build_state_from_interactive_request(
         match model.node_kind(&state) {
             NodeKind::Terminal => {
                 return Err(
-                    "action history cannot be applied because the hand is already terminal".to_string()
+                    "action history cannot be applied because the hand is already terminal"
+                        .to_string(),
                 )
             }
             NodeKind::Chance => {
@@ -613,10 +614,9 @@ fn build_state_from_interactive_request(
                 state = model.next_state(&state, idx);
             }
             NodeKind::Player(player_idx) => {
-                let game_state = state
-                    .game
-                    .as_ref()
-                    .ok_or_else(|| "expected resolved NLHE game while replaying actions".to_string())?;
+                let game_state = state.game.as_ref().ok_or_else(|| {
+                    "expected resolved NLHE game while replaying actions".to_string()
+                })?;
                 let action_space = enumerate_action_space(game_state, player_idx);
                 if action_space.is_empty() {
                     return Err("player node has no legal actions".to_string());
@@ -636,11 +636,14 @@ fn build_state_from_interactive_request(
         NodeKind::Player(idx) => idx,
         NodeKind::Terminal => {
             return Err(
-                "interactive request resolved to a terminal state; no decision available".to_string()
+                "interactive request resolved to a terminal state; no decision available"
+                    .to_string(),
             )
         }
         NodeKind::Chance => {
-            return Err("interactive request resolved to a chance node; expected player node".to_string())
+            return Err(
+                "interactive request resolved to a chance node; expected player node".to_string(),
+            )
         }
     };
     let hero = request.hero_seat.unwrap_or(actor);
@@ -652,7 +655,11 @@ fn build_state_from_interactive_request(
     Ok((state, hero))
 }
 
-fn run_interactive(config: &Config, model: &NlheGameModel, searcher: &RealtimeSearcher) -> AppResult<()> {
+fn run_interactive(
+    config: &Config,
+    model: &NlheGameModel,
+    searcher: &RealtimeSearcher,
+) -> AppResult<()> {
     let mut input = String::new();
     io::stdin()
         .read_to_string(&mut input)
@@ -661,8 +668,8 @@ fn run_interactive(config: &Config, model: &NlheGameModel, searcher: &RealtimeSe
         return Err("interactive mode requires JSON input on stdin".to_string());
     }
 
-    let request: InteractiveRequest =
-        serde_json::from_str(&input).map_err(|err| format!("invalid interactive JSON input: {err}"))?;
+    let request: InteractiveRequest = serde_json::from_str(&input)
+        .map_err(|err| format!("invalid interactive JSON input: {err}"))?;
     let (state, hero_seat) = build_state_from_interactive_request(&request, model)?;
 
     let mut search_cfg = build_search_config(config);
@@ -780,11 +787,7 @@ fn generate_benchmark_scenarios(
             }
             if let NodeKind::Player(hero_seat) = model.node_kind(&state) {
                 candidate = Some(BenchmarkScenario {
-                    name: format!(
-                        "scenario_{:02}_{}",
-                        scenario_idx + 1,
-                        round_label(&state)
-                    ),
+                    name: format!("scenario_{:02}_{}", scenario_idx + 1, round_label(&state)),
                     state,
                     hero_seat,
                 });
@@ -815,7 +818,11 @@ fn generate_benchmark_scenarios(
     out
 }
 
-fn run_benchmark(config: &Config, model: &NlheGameModel, searcher: &RealtimeSearcher) -> AppResult<()> {
+fn run_benchmark(
+    config: &Config,
+    model: &NlheGameModel,
+    searcher: &RealtimeSearcher,
+) -> AppResult<()> {
     let scenarios = generate_benchmark_scenarios(model, config.seed, 10);
     if scenarios.is_empty() {
         return Err("failed to generate benchmark scenarios".to_string());
@@ -835,11 +842,10 @@ fn run_benchmark(config: &Config, model: &NlheGameModel, searcher: &RealtimeSear
     let mut total_infosets = 0usize;
 
     for scenario in scenarios {
-        let game_state = scenario
-            .state
-            .game
-            .as_ref()
-            .ok_or_else(|| "benchmark scenario is missing resolved NLHE game state".to_string())?;
+        let game_state =
+            scenario.state.game.as_ref().ok_or_else(|| {
+                "benchmark scenario is missing resolved NLHE game state".to_string()
+            })?;
         let action_space = enumerate_action_space(game_state, scenario.hero_seat);
         let decision_budget_ms = resolve_budget_ms(config, &scenario.state, &action_space);
         let mut cfg = build_search_config(config);
@@ -929,10 +935,9 @@ fn simulate_ring_hand_with_search(
                 state = model.next_state(&state, action_idx);
             }
             NodeKind::Player(player_idx) => {
-                let game_state = state
-                    .game
-                    .as_ref()
-                    .ok_or_else(|| "expected resolved NLHE state at ring-eval player node".to_string())?;
+                let game_state = state.game.as_ref().ok_or_else(|| {
+                    "expected resolved NLHE state at ring-eval player node".to_string()
+                })?;
                 let action_space = enumerate_action_space(game_state, player_idx);
                 if action_space.is_empty() {
                     let utilities = (0..model.config.num_players)
@@ -947,7 +952,8 @@ fn simulate_ring_hand_with_search(
                     search_cfg.time_budget_ms = decision_budget_ms;
                     let result = searcher.search(model, &state, player_idx, &search_cfg)?;
                     stats.decisions = stats.decisions.saturating_add(1);
-                    stats.total_budget_ms = stats.total_budget_ms.saturating_add(decision_budget_ms);
+                    stats.total_budget_ms =
+                        stats.total_budget_ms.saturating_add(decision_budget_ms);
                     stats.total_search_ms = stats
                         .total_search_ms
                         .saturating_add(result.elapsed.as_millis());
@@ -959,7 +965,8 @@ fn simulate_ring_hand_with_search(
                         .saturating_add(result.infoset_count as u64);
                     sample_action_from_result(&result, &mut rng)
                 } else {
-                    let strategy = opponent_policies[player_idx].get_strategy(&state, player_idx)?;
+                    let strategy =
+                        opponent_policies[player_idx].get_strategy(&state, player_idx)?;
                     if strategy.len() != action_space.len() {
                         return Err(format!(
                             "opponent strategy/action mismatch for seat {player_idx}: strategy={}, actions={}",
@@ -976,7 +983,11 @@ fn simulate_ring_hand_with_search(
     }
 }
 
-fn run_ring_eval(config: &Config, model: &NlheGameModel, searcher: &RealtimeSearcher) -> AppResult<()> {
+fn run_ring_eval(
+    config: &Config,
+    model: &NlheGameModel,
+    searcher: &RealtimeSearcher,
+) -> AppResult<()> {
     let cfg = RealtimeConfig {
         time_budget_ms: config.time_budget_ms,
         worker_threads: config.threads,
@@ -1041,7 +1052,8 @@ fn run_ring_eval(config: &Config, model: &NlheGameModel, searcher: &RealtimeSear
         }
 
         let completed = done.fetch_add(1, AtomicOrdering::Relaxed) + 1;
-        if config.progress_every > 0 && (completed % config.progress_every == 0 || completed == config.hands)
+        if config.progress_every > 0
+            && (completed % config.progress_every == 0 || completed == config.hands)
         {
             let elapsed = started.elapsed().as_secs_f64();
             let done_clamped = completed.min(config.hands);
@@ -1138,7 +1150,8 @@ fn run_ring_eval(config: &Config, model: &NlheGameModel, searcher: &RealtimeSear
     });
     println!(
         "REALTIME_RING_EVAL_JSON {}",
-        serde_json::to_string(&payload).map_err(|err| format!("failed to encode ring-eval json: {err}"))?
+        serde_json::to_string(&payload)
+            .map_err(|err| format!("failed to encode ring-eval json: {err}"))?
     );
     Ok(())
 }
@@ -1338,8 +1351,19 @@ fn card_sort_key(c: Card) -> u64 {
 
 fn all_52_cards() -> Vec<Card> {
     let ranks = [
-        Rank::Two, Rank::Three, Rank::Four, Rank::Five, Rank::Six, Rank::Seven,
-        Rank::Eight, Rank::Nine, Rank::Ten, Rank::Jack, Rank::Queen, Rank::King, Rank::Ace,
+        Rank::Two,
+        Rank::Three,
+        Rank::Four,
+        Rank::Five,
+        Rank::Six,
+        Rank::Seven,
+        Rank::Eight,
+        Rank::Nine,
+        Rank::Ten,
+        Rank::Jack,
+        Rank::Queen,
+        Rank::King,
+        Rank::Ace,
     ];
     let suits = [Suit::Clubs, Suit::Diamonds, Suit::Hearts, Suit::Spades];
     let mut cards = Vec::with_capacity(52);
@@ -1390,11 +1414,7 @@ fn build_live_state(
         ));
     }
 
-    let board: Vec<Card> = req
-        .board
-        .iter()
-        .filter_map(|s| Card::parse(s))
-        .collect();
+    let board: Vec<Card> = req.board.iter().filter_map(|s| Card::parse(s)).collect();
 
     let deck = build_live_deck(num_players, hero_seat, &hero_cards, &board, rng);
 
@@ -1502,9 +1522,8 @@ fn build_live_state(
         match model.node_kind(&state) {
             NodeKind::Chance => {
                 state = model.next_state(&state, 0);
-                replay_alignment.post_replay_chance_steps = replay_alignment
-                    .post_replay_chance_steps
-                    .saturating_add(1);
+                replay_alignment.post_replay_chance_steps =
+                    replay_alignment.post_replay_chance_steps.saturating_add(1);
             }
             _ => break,
         }
@@ -1545,18 +1564,12 @@ fn map_live_action_to_index(
     let total = live_action.total.unwrap_or(0);
 
     match action_type.as_str() {
-        "fold" | "f" => {
-            find_action_index(action_space, |a| a.action_token == "f")
-                .ok_or_else(|| "no fold action available".to_string())
-        }
-        "check" | "x" => {
-            find_action_index(action_space, |a| a.action_token == "x")
-                .ok_or_else(|| "no check action available".to_string())
-        }
-        "call" | "c" => {
-            find_action_index(action_space, |a| a.action_token == "c")
-                .ok_or_else(|| "no call action available".to_string())
-        }
+        "fold" | "f" => find_action_index(action_space, |a| a.action_token == "f")
+            .ok_or_else(|| "no fold action available".to_string()),
+        "check" | "x" => find_action_index(action_space, |a| a.action_token == "x")
+            .ok_or_else(|| "no check action available".to_string()),
+        "call" | "c" => find_action_index(action_space, |a| a.action_token == "c")
+            .ok_or_else(|| "no call action available".to_string()),
         "allin" | "all-in" | "all_in" | "ai" => {
             find_action_index(action_space, |a| a.action_token == "ai")
                 .or_else(|| {
@@ -1720,10 +1733,11 @@ fn process_live_line(
         let sample_seed = rng.gen::<u64>();
         let mut sample_rng = StdRng::seed_from_u64(sample_seed);
 
-        let (state, hero_seat, alignment_counts) = match build_live_state(&req, config, model, &mut sample_rng) {
-            Ok(v) => v,
-            Err(_) => continue,
-        };
+        let (state, hero_seat, alignment_counts) =
+            match build_live_state(&req, config, model, &mut sample_rng) {
+                Ok(v) => v,
+                Err(_) => continue,
+            };
         replay_alignment.observe(&alignment_counts);
 
         // Verify hero's turn.
@@ -1752,10 +1766,17 @@ fn process_live_line(
         valid_samples += 1;
 
         for entry in &result.action_probabilities {
-            if let Some(existing) = total_probs.iter_mut().find(|(t, _, _)| t == &entry.action_token) {
+            if let Some(existing) = total_probs
+                .iter_mut()
+                .find(|(t, _, _)| t == &entry.action_token)
+            {
                 existing.1 += entry.probability;
             } else {
-                total_probs.push((entry.action_token.clone(), entry.probability, entry.policy_slot as u8));
+                total_probs.push((
+                    entry.action_token.clone(),
+                    entry.probability,
+                    entry.policy_slot as u8,
+                ));
             }
         }
     }

@@ -60,7 +60,11 @@ impl LagPolicy {
                 // Check less often than passive profiles.
                 1 => {
                     if to_call == 0 {
-                        if is_preflop { 0.35 } else { 0.25 }
+                        if is_preflop {
+                            0.35
+                        } else {
+                            0.25
+                        }
                     } else {
                         0.0
                     }

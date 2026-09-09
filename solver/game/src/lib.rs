@@ -381,7 +381,11 @@ impl NlheGame {
             round: BettingRound::Preflop,
             players,
             board: Vec::with_capacity(5),
-            button_index: if config.num_players == 2 { 0 } else { config.num_players - 1 },
+            button_index: if config.num_players == 2 {
+                0
+            } else {
+                config.num_players - 1
+            },
             deck,
             needs_action: vec![false; config.num_players],
             current_actor: None,

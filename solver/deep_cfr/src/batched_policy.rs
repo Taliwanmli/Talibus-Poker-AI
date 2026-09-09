@@ -61,7 +61,9 @@ impl BatchInferenceServer {
             .spawn(move || {
                 let _ = run_server_loop(&model_path, receiver, &runtime);
             })
-            .map_err(|err| OnnxPolicyError::Message(format!("failed to spawn batch server: {err}")))?;
+            .map_err(|err| {
+                OnnxPolicyError::Message(format!("failed to spawn batch server: {err}"))
+            })?;
         Ok(Self {
             sender: Some(sender),
             join_handle: Some(join_handle),

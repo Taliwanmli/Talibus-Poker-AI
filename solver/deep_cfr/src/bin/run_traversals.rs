@@ -613,20 +613,25 @@ where
                         if traversals_done_before >= traversals {
                             break;
                         }
-                        let worker_traversals = (traversals - traversals_done_before).min(job_chunk_size);
+                        let worker_traversals =
+                            (traversals - traversals_done_before).min(job_chunk_size);
                         let worker_seed = seed
-                            ^ ((traversals_done_before as u64 + 1).wrapping_mul(0x9E37_79B9_7F4A_7C15))
+                            ^ ((traversals_done_before as u64 + 1)
+                                .wrapping_mul(0x9E37_79B9_7F4A_7C15))
                             ^ ((worker_traversals as u64).wrapping_mul(0xD1B5_4A32_D192_ED03))
                             ^ ((iteration as u64).wrapping_mul(0x94D0_49BB_1331_11EB));
-                        let (mut advantage_samples, mut strategy_samples, stats) = run_traversal_batch(
-                            model,
-                            worker_policies.as_mut_slice(),
-                            player,
-                            worker_traversals,
-                            worker_seed,
-                            iteration,
-                        )
-                        .map_err(|err| format!("worker {worker_idx} traversal failed: {err}"))?;
+                        let (mut advantage_samples, mut strategy_samples, stats) =
+                            run_traversal_batch(
+                                model,
+                                worker_policies.as_mut_slice(),
+                                player,
+                                worker_traversals,
+                                worker_seed,
+                                iteration,
+                            )
+                            .map_err(|err| {
+                                format!("worker {worker_idx} traversal failed: {err}")
+                            })?;
                         all_adv_samples.append(&mut advantage_samples);
                         all_strategy_samples.append(&mut strategy_samples);
                         all_stats.merge_from(&stats);
@@ -1007,10 +1012,7 @@ fn run_main() -> AppResult<()> {
         .join(",");
     println!(
         "[deep-cfr-traverse] players=[{}] iteration={} traversals={} policies={}",
-        players_desc,
-        config.iteration,
-        config.traversals,
-        policy_desc,
+        players_desc, config.iteration, config.traversals, policy_desc,
     );
     println!(
         "[deep-cfr-traverse] game: {}-player {:.1}bb (sb={} bb={} stack={})",

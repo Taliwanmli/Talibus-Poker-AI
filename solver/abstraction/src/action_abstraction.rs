@@ -136,13 +136,22 @@ mod tests {
 
     #[test]
     fn raise_and_preflop_reraise_constants_match_plan() {
-        assert_eq!(street_raise_multiplier_grid(Street::Flop), &[2.0, 2.5, 3.0, 3.5, 4.5]);
-        assert_eq!(street_raise_multiplier_grid(Street::Turn), &[2.0, 2.5, 3.0, 3.75, 5.0]);
+        assert_eq!(
+            street_raise_multiplier_grid(Street::Flop),
+            &[2.0, 2.5, 3.0, 3.5, 4.5]
+        );
+        assert_eq!(
+            street_raise_multiplier_grid(Street::Turn),
+            &[2.0, 2.5, 3.0, 3.75, 5.0]
+        );
         assert_eq!(
             street_raise_multiplier_grid(Street::River),
             &[1.8, 2.3, 3.0, 4.0, 5.5]
         );
-        assert_eq!(preflop_reraise_multiplier_grid(), &[2.0, 2.3, 2.7, 3.2, 4.0]);
+        assert_eq!(
+            preflop_reraise_multiplier_grid(),
+            &[2.0, 2.3, 2.7, 3.2, 4.0]
+        );
     }
 
     #[test]

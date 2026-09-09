@@ -473,7 +473,8 @@ mod tests {
     #[test]
     fn stale_max_actions_header_is_rejected() {
         let path = std::env::temp_dir().join("deep_cfr_strategy_stale_max_actions.bin");
-        let mut writer = std::io::BufWriter::new(std::fs::File::create(&path).expect("create file"));
+        let mut writer =
+            std::io::BufWriter::new(std::fs::File::create(&path).expect("create file"));
         let mut header = SampleHeader::for_magic(STRATEGY_SAMPLE_MAGIC);
         header.max_actions = header.max_actions.saturating_sub(1);
         write_header(&mut writer, &header).expect("write header");
