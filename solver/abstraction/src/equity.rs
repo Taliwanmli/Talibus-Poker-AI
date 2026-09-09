@@ -220,7 +220,8 @@ fn build_remaining_deck(used: &HashSet<u8>) -> Vec<Card> {
 mod tests {
     use super::{
         compute_board_texture_equity_multiway_with_seed, compute_board_texture_equity_with_seed,
-        compute_equity_multiway_with_seed, compute_equity_with_seed, equity_to_histogram, EQUITY_DIMS,
+        compute_equity_multiway_with_seed, compute_equity_with_seed, equity_to_histogram,
+        EQUITY_DIMS,
     };
     use rs_poker::core::{Card, Suit, Value};
 
@@ -268,7 +269,10 @@ mod tests {
             Card::new(Value::Two, Suit::Club),
         ];
         let eq = compute_board_texture_equity_multiway_with_seed(&board, 5, 5_000, 77);
-        assert!((0.0..=1.0).contains(&eq), "multiway board equity out of range: {eq}");
+        assert!(
+            (0.0..=1.0).contains(&eq),
+            "multiway board equity out of range: {eq}"
+        );
     }
 
     #[test]

@@ -447,11 +447,11 @@ fn build_policies_for_worker(config: &Config, worker_idx: usize) -> AppResult<Ve
             let policy =
                 OnnxPolicy::from_file_with_output_mode(&config.model_path, config.policy_output)
                     .map_err(|err| {
-                    format!(
-                        "worker {worker_idx} failed to load model {}: {err}",
-                        config.model_path.display()
-                    )
-                })?;
+                        format!(
+                            "worker {worker_idx} failed to load model {}: {err}",
+                            config.model_path.display()
+                        )
+                    })?;
             policies.push(PlayerPolicy::Onnx(policy));
         } else {
             match config.opponent {
@@ -468,7 +468,11 @@ fn build_policies_for_worker(config: &Config, worker_idx: usize) -> AppResult<Ve
     Ok(policies)
 }
 
-fn simulate_hand(game: &NlheGameModel, policies: &mut [PlayerPolicy], seed: u64) -> AppResult<Vec<f64>> {
+fn simulate_hand(
+    game: &NlheGameModel,
+    policies: &mut [PlayerPolicy],
+    seed: u64,
+) -> AppResult<Vec<f64>> {
     let mut rng = StdRng::seed_from_u64(seed);
     let mut state: NlheState = game.root_state();
     loop {
@@ -586,7 +590,13 @@ fn evaluate_ring_game(
                         );
                     }
 
-                    Ok((model_total_bb, per_seat_total_bb, model_wins, model_losses, ties))
+                    Ok((
+                        model_total_bb,
+                        per_seat_total_bb,
+                        model_wins,
+                        model_losses,
+                        ties,
+                    ))
                 },
             )
             .collect::<Vec<_>>()
@@ -710,9 +720,7 @@ fn run_main() -> AppResult<()> {
         "[ring-eval]   outcomes: wins={} losses={} ties={}",
         report.model_wins, report.model_losses, report.ties
     );
-    println!(
-        "[ring-eval]   zero_sum_check={zero_sum_check:+.9} bb/hand"
-    );
+    println!("[ring-eval]   zero_sum_check={zero_sum_check:+.9} bb/hand");
     println!("[ring-eval]   hands={} elapsed={elapsed:.1}s", report.hands);
 
     let payload = format!(

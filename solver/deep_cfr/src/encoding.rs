@@ -278,6 +278,9 @@ mod tests {
         let actor_hist_b = vec![2u8, 3u8];
         let features_a = encode_nlhe_game(&game, 0, &tokens, &actor_hist_a);
         let features_b = encode_nlhe_game(&game, 0, &tokens, &actor_hist_b);
-        assert_ne!(features_a, features_b, "actor-aware history should alter encoding");
+        assert_ne!(
+            features_a, features_b,
+            "actor-aware history should alter encoding"
+        );
     }
 }

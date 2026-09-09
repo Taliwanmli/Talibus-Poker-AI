@@ -318,9 +318,9 @@ impl RealtimeSearcher {
                 .map_err(|err| format!("failed to start GPU batch inference server: {err}"))?;
                 *guard = Some(server);
             }
-            let server = guard
-                .as_ref()
-                .ok_or_else(|| "batch server unexpectedly missing after initialization".to_string())?;
+            let server = guard.as_ref().ok_or_else(|| {
+                "batch server unexpectedly missing after initialization".to_string()
+            })?;
             for _ in 0..thread_count {
                 worker_policies.push(WorkerPolicy::Batched(server.client(self.output_mode)));
             }
@@ -364,7 +364,8 @@ impl RealtimeSearcher {
                         .build()
                         .map_err(|err| format!("failed to build thread pool: {err}"))?,
                 );
-                let worker_policies = self.build_worker_policies(thread_count, cfg.enable_gpu_batch)?;
+                let worker_policies =
+                    self.build_worker_policies(thread_count, cfg.enable_gpu_batch)?;
                 *resources_guard = Some(CachedExecutionResources {
                     thread_count,
                     use_batch_inference: cfg.enable_gpu_batch,
@@ -495,7 +496,9 @@ fn run_search(
         }
     });
 
-    let iterations = iteration_counter.load(AtomicOrdering::Relaxed).min(max_iterations);
+    let iterations = iteration_counter
+        .load(AtomicOrdering::Relaxed)
+        .min(max_iterations);
     let root_infoset_key = model.infoset_key(root_state, hero_seat);
     let strategy = infosets
         .current_strategy(&root_infoset_key, action_count)
@@ -642,7 +645,8 @@ fn evaluate_leaf(
         .game
         .as_ref()
         .ok_or_else(|| "leaf evaluation requires resolved NLHE state".to_string())?;
-    let mut continuation_by_player = vec![ContinuationStrategy::Blueprint; model.config.num_players];
+    let mut continuation_by_player =
+        vec![ContinuationStrategy::Blueprint; model.config.num_players];
     for seat in 0..model.config.num_players {
         let player = &game_state.players[seat];
         if player.folded || player.all_in || seat == traverser {
@@ -738,7 +742,10 @@ fn rollout_to_terminal(
 }
 
 fn continuation_infoset_key(model: &NlheGameModel, state: &NlheState, player_idx: usize) -> String {
-    format!("cont|p={player_idx}|{}", model.infoset_key(state, player_idx))
+    format!(
+        "cont|p={player_idx}|{}",
+        model.infoset_key(state, player_idx)
+    )
 }
 
 fn apply_continuation_bias(
@@ -777,7 +784,9 @@ fn apply_continuation_bias(
     probabilities.copy_from_slice(&normalized);
 }
 
-fn action_slots_and_mask(action_space: &[IndexedAction]) -> RealtimeResult<(Vec<usize>, [f32; MAX_ACTIONS])> {
+fn action_slots_and_mask(
+    action_space: &[IndexedAction],
+) -> RealtimeResult<(Vec<usize>, [f32; MAX_ACTIONS])> {
     let mut slots = Vec::with_capacity(action_space.len());
     let mut mask = [0.0f32; MAX_ACTIONS];
     for action in action_space {
@@ -798,7 +807,11 @@ fn active_player_count(state: &NlheState) -> usize {
     let Some(game_state) = state.game.as_ref() else {
         return 0;
     };
-    game_state.players.iter().filter(|player| !player.folded).count()
+    game_state
+        .players
+        .iter()
+        .filter(|player| !player.folded)
+        .count()
 }
 
 fn sample_from_probs(probabilities: &[f64], rng: &mut StdRng) -> usize {
@@ -840,7 +853,11 @@ fn normalize_probs(values: &[f64]) -> Vec<f64> {
     let mut out = vec![0.0f64; values.len()];
     let mut sum = 0.0f64;
     for (idx, value) in values.iter().enumerate() {
-        let clipped = if value.is_finite() { (*value).max(0.0) } else { 0.0 };
+        let clipped = if value.is_finite() {
+            (*value).max(0.0)
+        } else {
+            0.0
+        };
         out[idx] = clipped;
         sum += clipped;
     }
@@ -860,7 +877,10 @@ pub fn sample_action_from_result(result: &SearchResult, rng: &mut StdRng) -> usi
     sample_from_probs(&probs, rng)
 }
 
-pub fn onnx_load_test(path: impl AsRef<Path>, output_mode: PolicyOutput) -> Result<(), OnnxPolicyError> {
+pub fn onnx_load_test(
+    path: impl AsRef<Path>,
+    output_mode: PolicyOutput,
+) -> Result<(), OnnxPolicyError> {
     let _ = OnnxPolicy::from_file_with_output_mode(path, output_mode)?;
     Ok(())
 }
